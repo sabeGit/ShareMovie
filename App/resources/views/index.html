@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Real time search</title>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p>
+                <input type="text" v-model="keyword">
+                <button type="submit" v-on:click="callAPI">送信</button>
+            </p>
+            <div v-for="item in items">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                          {{ item.volumeInfo.title }}
+                    </div>
+                    <div class="panel-body">
+                        <img class="card-img-top" v-bind:src="item.volumeInfo.imageLinks.thumbnail" alt="Card image cap">
+                        {{ item.volumeInfo.description }}
+                        {{ item.volumeInfo.authors[0] }}
+                    </div>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>

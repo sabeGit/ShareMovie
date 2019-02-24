@@ -1,0 +1,442 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+$color-watched: #00CC00;
+$color-not-watched: #ff69a3;
+
+/*
+* ページ共通
+*/
+.container {
+    max-width: 1500px;
+}
+dt {
+    float: left ;
+    clear: left ;
+    margin-right: 0.5em ;
+    width: 80px ;
+}
+dd {
+    float: left ;
+    margin-left: 1em ;
+}
+.dropdown-item {
+    cursor: pointer;
+}
+a {
+    text-decoration: none;
+}
+
+/*
+* 共通ヘッダー
+*/
+.navbar-laravel {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+// .navbar-light .navbar-brand {
+//     color: white;
+// }
+// .navbar-light .navbar-nav .nav-link {
+//     color: white;
+// }
+// .navbar-light .navbar-brand:hover,
+// .navbar-light .navbar-brand:focus {
+//   color: white;
+// }
+// .navbar-light .navbar-nav .show > .nav-link,
+// .navbar-light .navbar-nav .active > .nav-link,
+// .navbar-light .navbar-nav .nav-link.show,
+// .navbar-light .navbar-nav .nav-link.active {
+//   color: white;
+// }
+// .navbar-light .navbar-nav .nav-link:hover,
+// .navbar-light .navbar-nav .nav-link:focus {
+//   color: white;
+// }
+.row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
+}
+.nav-item.search {
+    display: flex;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.nav-item.login, .nav-item.register {
+    float: left;
+}
+.form-control.search {
+    border-radius: 0.25rem 0rem 0rem 0.25rem;
+}
+.input-group-btn {
+    background-color: silver;
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+}
+.nav-link.home {
+    color: black;
+    font-size: 130%;
+}
+
+/*
+* movies.indexページ（映画一覧画面）
+*/
+.card-img-top.img-index {
+    width: 100%;
+    height: 100%;
+    float: left;
+    margin-right: 10px;
+}
+.card.card-index {
+    display: inline-block;
+    border: initial;
+    height: 285px;
+    width: auto;
+}
+
+/*
+* movies.showページ（映画詳細画面）
+*/
+.card-img-top.img-show {
+    float: left;
+}
+.poster-img.movie-detail {
+    width: 300px;
+    height: 450px;
+}
+.card.card-show.movie-detail {
+    display: inline-block;
+    border: initial;
+    width: auto;
+}
+.movie-title.movie-detail {
+    margin-bottom: 10px;
+    color: black;
+    position: relative;
+    margin: auto;
+}
+// a.movie-title.movie-detail:hover {
+//     color: #4c4c4c;
+//     text-decoration: none;
+// }
+.movie-overview.movie-detail {
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.show-actions.movie-detail ul li{
+    display: inline;
+}
+.action-list.movie-detail {
+    float: left;
+    list-style: none;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/*
+* movie.showページ modal
+*/
+.btn.btn-secondary {
+    background-color: white;
+    color: black;
+}
+
+/*
+* マイページ（ユーザ詳細画面）
+*/
+.user-item-list {
+    list-style: none;
+}
+.navbar.user-item-nav {
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    box-shadow: 0 2px 4px #e3e3e3;
+}
+.action-form {
+    position: absolute;
+    bottom: 0;
+}
+
+/*
+* 映画リスト
+*/
+.movie-list {
+    margin: auto;
+}
+.movie-item {
+    border: 1px solid #e3e3e3;
+    box-shadow: 0 2px 4px #e3e3e3;
+    background-color: #f5f5f5;
+    margin-top: 40px;
+    display: flex;
+    min-width: 550px;
+}
+.movie-content {
+    width: 100%;
+    position: relative;
+}
+.movie-header {
+    display: flex;
+    align-items: center;
+    min-height: 80px;
+    border-bottom: 1px solid #c8c8c8;
+    position: relative;
+}
+.movie-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-left: 15px;
+    margin-top: 8px;
+    top: 0;
+    position: absolute;
+    color: black;
+}
+.movie-body > .movie-overview {
+    margin-left: 15px;
+    margin-right: 15px;
+    line-height: 1.8;
+    max-width: 748px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+}
+.movie-footer {
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 10px;
+}
+.poster {
+    float: left;
+}
+.poster-img {
+    width:150px;
+    height:250px;
+  	object-fit:cover;
+}
+.movie-content {
+
+}
+
+/*
+* RateAction
+*/
+.rate-action {
+    float: left;
+    line-height: 35px;
+    margin-left: 15px;
+}
+.rating-label {
+    float: left;
+    margin: auto;
+}
+.rate-action.editable {
+    border: solid 2px darkgray;
+    border-radius: 0px 5px 5px 0px;
+    border-left: 0;
+    margin-left: 0;
+}
+.star-rating {
+    font-size: 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 125px;
+    height: 25px;
+    overflow: hidden;
+    position: relative;
+    background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#DDDDDD" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+    background-size: contain;
+    float: left;
+    margin: 5px;
+}
+.star-rating i {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 20%;
+    z-index: 1;
+    background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#FFDF88" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+    background-size: contain;
+}
+.star-rating input {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    opacity: 0;
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    position: relative;
+}
+.star-rating.editable input {
+    cursor: pointer;
+}
+.star-rating.editable input:hover + i,
+.star-rating input:checked + i {
+    opacity: 1;
+}
+.star-rating i ~ i {
+    width: 40%;
+}
+.star-rating i ~ i ~ i {
+    width: 60%;
+}
+.star-rating i ~ i ~ i ~ i {
+    width: 80%;
+}
+.star-rating i ~ i ~ i ~ i ~ i {
+    width: 100%;
+}
+.choice {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 20px;
+    display: block;
+}
+
+/*
+* FavAction
+*/
+.favorite-action {
+    float: left;
+    border: solid 2px darkgray;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+a.favorite {
+    font-size: 25px;
+    color: darkgray;
+    float: left;
+    text-decoration: none;
+    margin: 5px;
+}
+a.favorite.active {
+    color: red;
+}
+a.favorite:hover {
+    color: red;
+}
+.favorite:hover + .balloon {
+    display: block;
+}
+/* 吹き出し本体 */
+.balloon{
+    display: none;
+    position: absolute;
+    padding: 20px;
+    background-color: #ffadad;
+    border: 2px solid #ca8888;
+}
+
+/* beforeで枠線の三角を表現 */
+.balloon::before{
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    left: 20px;
+    top: -15px;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #ca8888;
+    border-left: 15px solid transparent;
+}
+
+/* beforeで本体の三角を表現 */
+.balloon::after{
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    left: 20px;
+    top: -12px;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #ffadad;
+    border-left: 15px solid transparent;
+}
+// .action.favorite > span {
+//     font-size: 25px;
+//     color: darkgray;
+// }
+// .action.favorite.active > span {
+//     font-size: 25px;
+//     color: red;
+// }
+// .action.favorite:hover > span {
+//     font-size: 25px;
+//     color: red;
+// }
+// a.action.favorite {
+//     padding: 0.5em 1em;
+//     margin: 2em 0;
+//     font-weight: bold;
+//     border: solid 3px darkgray;
+//     border-radius: 10px;
+// }
+// a.action.favorite:hover {
+//     padding: 0.5em 1em;
+//     margin: 2em 0;
+//     font-weight: bold;
+//     border: solid 3px darkgray;
+//     border-radius: 10px;
+//     background-color: darkgray;
+// }
+
+/*
+* WatchedAction
+*/
+.watched-action {
+    float: left;
+    border: solid 2px darkgray;
+    border-radius: 5px 0px 0px 5px;
+    margin-left: 15px;
+}
+a.watched {
+    font-size: 25px;
+    color: darkgray;
+    float: left;
+    text-decoration: none;
+    margin: 5px;
+}
+a.watched.active {
+    color: royalblue;
+}
+a.watched:hover {
+    color: royalblue;
+}
+.watched:hover + .balloon {
+    display: inline;
+}
+// a.action.watched {
+//     padding: 0.5em 1em;
+//     margin: 2em 0;
+//     font-weight: bold;
+//     border: solid 3px darkgray;
+//     border-radius: 10px;
+// }
+// a.action.watched:hover {
+//     padding: 0.5em 1em;
+//     margin: 2em 0;
+//     font-weight: bold;
+//     border: solid 3px darkgray;
+//     border-radius: 10px;
+//     background-color: darkgray;
+// }
