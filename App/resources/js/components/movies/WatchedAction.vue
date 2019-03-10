@@ -1,11 +1,7 @@
 <template>
     <div class="watched-action">
-        <a href="#" class="fa fa-eye watched" v-bind:class="{ active: watched }" v-on:click="doWatchedAction()">
-            <!-- <span class="fa fa-eye" v-bind:class="{ active: watched }" aria-hidden="true"></span> -->
-        </a>
-        <!-- <div class="balloon favorite">
-            視聴済み
-        </div> -->
+        <span class="fa fa-eye watched action" v-bind:class="{ active: watchedData }" v-on:click="doWatchedAction()">
+        </span>
     </div>
 </template>
 <script>
@@ -14,16 +10,21 @@ export default {
         movie: {
             type: null,
             required: true,
+        },
+        watched: {
+            type: Number,
+            required: true,
         }
     },
-    computed: {
-        watched () {
-            return this.movie.users[0].pivot.watched;
+    data () {
+        return {
+            watchedData: this.watched,
         }
     },
     methods: {
         doWatchedAction: async function() {
-            await this.$store.dispatch('user/editWatchedMovie', { watched: !this.watched, movie: this.movie });
+            this.watchedData = !this.watchedData;
+            await this.$store.dispatch('user/editWatchedMovie', { watched: this.watchedData, movie: this.movie });
         },
     }
 }

@@ -15,8 +15,8 @@ interface PostRepositoryInterface
     /**
      * Request内容からPostを作成
      *
-     * @var User $user
-     * @return object
+     * @param Request $request
+     * @return Object
      */
     public function create($request);
 }

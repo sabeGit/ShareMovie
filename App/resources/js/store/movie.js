@@ -5,6 +5,7 @@ const state = {
     filteredMovies: null,
     isFavFilter: false,
     isWatchedFilter: false,
+    isRatingFilter: false,
     apiStatus: null,
 }
 
@@ -12,9 +13,11 @@ const getters = {
     movies: state => state.movies,
     filteredMovies: state => {
         if (state.movies && state.isFavFilter) {
-            return state.movies.filter(movie => movie.users[0].pivot.favorite);
+            return state.movies.filter(movie => movie.pivot.favorite);
         } else if (state.movies && state.isWatchedFilter) {
-            return state.movies.filter(movie => movie.users[0].pivot.watched);
+            return state.movies.filter(movie => movie.pivot.watched);
+        } else if (state.movies && state.isRatingFilter) {
+            return state.movies.filter(movie => movie.pivot.rating > 0);
         }
         return null;
     },
@@ -25,32 +28,33 @@ const getters = {
         return state.movies ? state.movies.filter(movie => movie.pivot.watched) :null
     },
     watchedMoviesCount: state => {
-        return state.movies ? state.movies.filter(movie => movie.users[0].pivot.watched).length : 0
+        //return state.movies ? state.movies.filter(movie => movie.users[0].pivot.watched).length : 0
+        return state.movies ? state.movies.filter(movie => movie.pivot.watched).length : 0
     },
     favMoviesCount: state => {
-        console.log(state.movies)
-        return state.movies ? state.movies.filter(movie => movie.users[0].pivot.favorite).length : 0
+        // return state.movies ? state.movies.filter(movie => movie.users[0].pivot.favorite).length : 0
+        return state.movies ? state.movies.filter(movie => movie.pivot.favorite).length : 0
     },
-    // avgRating: state => {
-    //     return !Array.isArray(state.movies.length) ? state.movies.movie_with_avg_rating[0].aggregate : null;
-    // },
-    // actors: state => {
-    //     return !Array.isArray(state.movies.length) ? state.movies.staffs.filter(staff => staff.pivot.is_actor) : null;
-    // },
-    // crews: state => {
-    //     return !Array.isArray(state.movies.length) ? state.movies.staffs.filter(staff => staff.pivot.is_crew) : null;
-    // },
 }
 
 const mutations = {
     setMovies (state, movies) {
         state.movies = movies;
     },
-    setIsFavFilter (state, favorite) {
-        state.isFavFilter = favorite;
+    filterFavorite (state) {
+        state.isFavFilter = true;
+        state.isWatchedFilter = false;
+        state.isRatingFilter = false;
     },
-    setIsWatchedFilter (state, watched) {
-        state.isWatchedFilter = watched;
+    filterWatched (state) {
+        state.isFavFilter = false;
+        state.isWatchedFilter = true;
+        state.isRatingFilter = false;
+    },
+    filterRating (state) {
+        state.isFavFilter = false;
+        state.isWatchedFilter = false;
+        state.isRatingFilter = true;
     },
     setApiStatus (state, status) {
         state.apiStatus = status;
@@ -60,20 +64,23 @@ const mutations = {
 const actions = {
     async getMovieById (context, { movieId, userId }) {
         context.commit('setApiStatus', null);
+        context.commit('post/setPosts', null, { root: true });
         const response = await axios.get('/api/movie', {
             params: {
                 movieId: movieId,
                 userId: userId
             }
         });
+        console.log(response.data)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
+            context.commit('post/setPosts', response.data.posts, { root: true });
             return response.data;
         }
     },
     async search (context, freeword) {
         context.commit('setApiStatus', null);
-        const response = await axios.get('/api/movie', {
+        const response = await axios.get('/api/movie/search', {
             params: {
                 freeword: freeword
             }

@@ -6,6 +6,7 @@ import noticeMessage from './noticeMessage'
 import auth from './auth'
 import movie from './movie'
 import user from './user'
+import post from './post'
 
 
 Vue.use(Vuex)
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
         auth,
         movie,
         user,
+        post,
     }
 })
 

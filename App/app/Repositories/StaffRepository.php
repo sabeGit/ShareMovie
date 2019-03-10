@@ -32,8 +32,8 @@ class StaffRepository implements StaffRepositoryInterface {
             $targetStaffArray = array();
             foreach($staffInfos as $staffInfo) {
                 $targetStaff = Staff::updateOrCreate(
-                    ['id'   => $staffInfo->id],
-                    ['name' => $staffInfo->name]
+                    ['id'   => $staffInfo['id']],
+                    ['name' => $staffInfo['name']]
                 );
                 $targetStaffArray[] = $targetStaff;
                 $creditArray[$job] = $targetStaffArray;

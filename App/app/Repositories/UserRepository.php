@@ -29,7 +29,7 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getUserByName($username) {
         $user = $this->user->where('name', $username)->first();
-        return $user->load('movies');
+        return $user->load('movies', 'posts.user', 'posts.movie');
     }
 
     /**
@@ -40,7 +40,7 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getUserByNameWithMovies($username) {
         $user = $this->user->where('name', $username)->first();
-        return $user->load('movies');
+        return $user->load('movies', 'posts');
     }
 
     /**
@@ -95,40 +95,18 @@ class UserRepository implements UserRepositoryInterface {
         ]);
     }
 
-    // /**
-    //  * userとmovieの紐づき情報を取得（単数）
-    //  *
-    //  * @param Model|$user|ユーザー
-    //  * @param int|$movie_id|映画id
-    //  * @return array|映画（単数）
-    //  */
-    // public function getAttachedMoviesById($user, $movie_id) {
-    //     return $movieList = $user->movies()->where('id', $movie_id)->get();
-    // }
-
-    // /**
-    //  * userとmovieの紐づき情報を取得（複数）
-    //  *
-    //  * @param Model|$user|ユーザー
-    //  * @return array|映画（複数）
-    //  */
-    // public function getAllAttachedMovies($user) {
-    //     return $movieList = $user->movies()->get();
-    // }
-
-    // /**
-    //  * userのお気に入り映画リストを取得
-    //  *
-    //  */
-    // public function getFavMovies($user) {
-    //     return $movieList = $user->movies()->where('movie_user_rels.favorite', true)->get();
-    // }
-    //
-    // /**
-    //  * userの視聴済み映画リストを取得
-    //  *
-    //  */
-    // public function getWatchedMovies($user) {
-    //     return $movieList = $user->movies()->where('movie_user_rels.watched', true)->get();
-    // }
+    /**
+     * アカウント情報を更新
+     *
+     * @param Model|$user|ユーザー
+     * @param String|$username|ユーザー名
+     * @param String|$imageUrl|プロフィール画像URL
+     * @return Model|$user|更新後ユーザー
+     */
+    public function editAccount($user, $username, $imageUrl) {
+        return $user->update([
+            'name' => $username,
+            'profile_image' => $imageUrl
+        ]);
+    }
 }

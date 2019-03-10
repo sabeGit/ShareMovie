@@ -47,6 +47,7 @@ Route::get('/user/movie/watched', 'UserController@getWatchedMovies');
 // })->name('user');
 
 Route::group(['middleware' => 'auth:api'], function() {
+    // コメントを投稿
     Route::post('posts', 'PostController@create');
     // お気に入り映画リストを編集
     Route::post('/user/movie/fav', 'UserController@editFavoriteMovie');
@@ -54,6 +55,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/user/movie/watched', 'UserController@editWatchedMovie');
     // 評価を編集
     Route::post('/user/movie/rating', 'UserController@editMovieRating');
+    // ユーザーアカウント情報を編集
+    Route::post('/user/account', 'UserController@editAccount');
     // ログアウト
     Route::post('/logout', 'Auth\LoginController@logout')->middleware('jwt.refresh')->name('logout');
     // ログインユーザー

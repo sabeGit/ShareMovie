@@ -11,11 +11,23 @@ class PostRepository implements PostRepositoryInterface {
                ->get();
     }
 
+    /**
+     * Request内容からPostを作成
+     *
+     * @param Request $request
+     * @return Object
+     */
     public function create($request) {
-        $request->user()->posts()->create([
-            'watched' => $request->watched,
-            'content'    => $request->content,
-            'movie_id'   => $request->movieId,
-        ]);
+        $post = new Post();
+        $post->content = $request->input('content');
+        $post->user_id = $request->user()->id;
+        $post->movie_id = $request->input('movie')['id'];
+        $post->save();
+        return $post;
+        // $post->content = $request->input('content')
+        // $request->user()->posts()->create([
+        //     'content'    => $request->input('content'),
+        //     'movie_id'   => 550,
+        // ]);
     }
 }

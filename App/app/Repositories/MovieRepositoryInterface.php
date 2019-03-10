@@ -27,18 +27,25 @@ interface MovieRepositoryInterface
     public function attachStaffs($movie, $staffArray);
 
     /**
-     * 映画の平均評価を取得
+     * 映画の平均評価を取得（ユーザー情報付き）
      *
      * @return Movie|平均評価付き映画
      */
-    public function getMovieWithAvgRating($movie_id, $user_id);
+    public function getMovieWithAvgRatingAndUserInfo($movie_id, $user_id);
 
     /**
      * 映画の平均評価を取得
      *
      * @return Movie|平均評価付き映画
      */
-    public function getMoviesWithAvgRating($movieIds, $user_id);
+    public function getMoviesWithAvgRating($movieIds);
+
+    /**
+     * 映画の平均評価を取得（ユーザー情報付き）
+     *
+     * @return Movie|平均評価付き映画
+     */
+    public function getMoviesWithAvgRatingAndUserInfo($movieIds, $user_id);
 
     // /**
     //  * 映画の平均評価を取得

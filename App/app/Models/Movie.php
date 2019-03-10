@@ -29,22 +29,22 @@ class Movie extends Model {
         return $this->belongsToMany('App\User', 'movie_user_rels', 'movie_id', 'user_id')->withPivot('watched', 'favorite', 'rating')->withTimestamps();
     }
 
-    public function movieWithAvgRating() {
+    public function posts() {
+        return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
+    }
+
+    public function avgRating() {
         return $this->belongsToMany('App\User', 'movie_user_rels', 'movie_id', 'user_id')
             ->withPivot('watched', 'favorite', 'rating')->withTimestamps()
-            ->selectRaw('AVG(rating) aggregate, movie_id, user_id, name, profile_image')
+            ->selectRaw('TRUNCATE(AVG(rating), 0) aggregate, movie_id, user_id, name, profile_image')
             ->groupBy('movie_id');
     }
 
-    // public function getMoviesWithAvgRatingAttribute() {
-    //     return $this->users->avg('pivot.rating');
-    // }
-
     // accessor for easier fetching the count
-    public function getMovieWithAvgRatingAttribute() {
-        if ( ! array_key_exists('movieWithAvgRating', $this->relations)) $this->load('movieWithAvgRating');
+    public function getAvgRatingAttribute() {
+        if ( ! array_key_exists('avgRating', $this->relations)) $this->load('avgRating');
 
-        $related = $this->getRelation('movieWithAvgRating')->first();
+        $related = $this->getRelation('avgRating')->first();
 
         return ($related) ? $related->aggregate : 0;
     }

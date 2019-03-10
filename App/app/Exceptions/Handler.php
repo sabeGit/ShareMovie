@@ -44,8 +44,18 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $e)
     {
-        return parent::render($request, $exception);
+        if ($request->expectsJson()) {
+            if ($e instanceOf ApiBaseException) {
+                return response()->json(
+                    ['message' => $e->getMessage()],
+                    $e->getCode(),
+                    ['Content-Type' => 'application/json'],
+                    JSON_UNESCAPED_UNICODE
+                );
+            }
+        }
+        return parent::render($request, $e);
     }
 }

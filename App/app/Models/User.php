@@ -8,7 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-use App\Post;
+use App\Models\Post;
 
 //class User extends Authenticatable implements MustVerifyEmailContract {
 class User extends Authenticatable implements JWTSubject {
@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject {
     protected $fillable = [
         'name', 'email', 'password',
         'email_verified', 'email_verify_token',
+        'profile_image'
     ];
 
     /**
@@ -42,7 +43,19 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     public function posts() {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
+    }
+
+    public function favoriteMovies() {
+        return $this->belongsToMany('App\Models\Movie', 'favorite')->withTimestamps();
+    }
+
+    public function watchedMovies() {
+        return $this->belongsToMany('App\Models\Movie', 'watched')->withTimestamps();
+    }
+
+    public function ratedMovies() {
+        return $this->belongsToMany('App\Models\Movie', 'rating')->withTimestamps();
     }
 
     public function movies() {

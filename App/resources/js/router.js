@@ -11,6 +11,7 @@ import PasswordReset from './pages/auth/PasswordReset.vue'
 import MovieSearchResult from './pages/movies/MovieSearchResult.vue'
 import MovieDetail from './pages/movies/MovieDetail.vue'
 import UserDetail from './pages/users/UserDetail.vue'
+import UserSetUpAccount from './pages/users/UserSetUpAccount.vue'
 import SystemError from './pages/errors/System.vue'
 
 import store from './store'
@@ -70,14 +71,25 @@ const routes = [
         component: SystemError
     },
     {
-        path: '/user/:username',
+        path: '/user/:username/:option',
         name: 'UserDetail',
         component: UserDetail
     },
     {
-        path: '/movie/:id',
+        path: '/setup/account',
+        name: 'UserSetUpAccount',
+        component: UserSetUpAccount
+    },
+    {
+        path: '/movie/show/:id',
         name: 'MovieDetail',
         component: MovieDetail
+    },
+    {
+        path: '/movie/search',
+        name: 'MovieSearchResult',
+        component: MovieSearchResult,
+        props: (route) => ({ freeword: route.query.freeword })
     }
 ]
 

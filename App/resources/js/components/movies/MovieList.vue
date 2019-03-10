@@ -8,9 +8,13 @@
                 <div class="movie-header">
                     <RouterLink class="movie-title" v-bind:to="{ name : 'MovieDetail', params : { id: movie.id }}">{{ movie.title }}</RouterLink>
                     <form class="action-form">
-                        <WatchedAction :movie="movie" v-show="isEditable"></WatchedAction>
-                        <RateAction :movie="movie" :isEditable="isEditable"></RateAction>
-                        <FavAction :movie="movie" v-show="isEditable"></FavAction>
+                        <WatchedAction :movie="movie" :watched="movie.pivot.watched" v-show="isEditable"></WatchedAction>
+                        <div class="rate-action" v-bind:class="{ editable: isEditable }">
+                            <p class="rating-label" v-if="isEditable">あなたの評価：</p>
+                            <p class="rating-label" v-else>ユーザーの評価：</p>
+                            <RateAction :movie="movie" :rating="movie.pivot.rating"  :isEditable="isEditable"></RateAction>
+                        </div>
+                        <FavAction :movie="movie" :favorite="movie.pivot.favorite" v-show="isEditable"></FavAction>
                     </form>
                 </div>
                 <div class="movie-body">

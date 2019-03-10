@@ -17,9 +17,7 @@ class MovieController extends Controller {
     }
 
     public function search(Request $request) {
-        $noimage  = asset('img/noimage.png');                       // poster_pathがnullだった場合、代わりに表示する画像
         $freeword = $request->input('freeword');                    // 検索キーワード
-        \Debugbar::info($request);
         $baseUrl  = 'https://api.themoviedb.org/3/search/movie';    // リクエストのベースURL
 
         if ($freeword == '') {
@@ -39,31 +37,85 @@ class MovieController extends Controller {
             $movies   = $json_obj->results;
         }
 
+        $movieIds  = $this->helperService->getMovieIdsFromSearchRes($movies);
+        $moviesWithAvgRating = $this->movieService->getMoviesWithAvgRating($movieIds);
+        foreach ($movies as $movie) {
+            $movie->avgRating = 0;
+            foreach ($moviesWithAvgRating as $movieWithAvgRating) {
+                if ($movie->id == $movieWithAvgRating->id)
+                $movie->avgRating = intval($movieWithAvgRating->avgRating);
+            }
+        }
+
         return $movies;
     }
 
-    public function getMovieById(Request $request) {
-        \Debugbar::info($request);
-        $movie = $this->movieService->getMovieWithAvgRating($request->input('movieId'), $request->input('userId'));
-        return $movie;
-    }
     // public function getMovieById(Request $request) {
-    //     $baseUrl  = 'https://api.themoviedb.org/3/movie/'.$request;    // リクエストのベースURL
-    //     /*
-    //     * リクエストパラメータを生成
-    //     * api_key            : APIキー
-    //     * language           : 言語
-    //     * append_to_response : 検索オプション
-    //     */
-    //     $params      = array('api_key'=>env('TMDB_ACCESSKEY'), 'language'=>'ja', 'append_to_response'=>'credits,videos');
-    //     $url         = $this->helperService->createUrlWithParams($baseUrl, $params);  // パラメータ付きのリクエストURLを取得
-    //     $json_str    = file_get_contents($url);    // URLからAPIを実行
-    //     $movie       = json_decode($json_str);     // jsonをobjectに変換
-    //     $creditArray = $this->helperService->getCredits($movie, 3);  // クレジット情報を取得
-    //     // $trailer     = $this->getTrailer();
+    //     $movieId = $request->input('movieId');                    // 映画ID
+    //     $baseUrl  = 'https://api.themoviedb.org/3/movie/';    // リクエストのベースURL
     //
-    //     return view('movies.show', compact('movie', 'creditArray'));
+    //     if ($movieId == '') {
+    //         $movie = null;
+    //     } else {
+    //         $baseUrl .= $movieId;
+    //         /*
+    //         * リクエストパラメータを生成
+    //         * api_key  : APIキー
+    //         * query    : 検索キーワード
+    //         * language : 言語
+    //         */
+    //         $params   = array('api_key'=>env('TMDB_ACCESSKEY'), 'language'=>'ja');
+    //         $url      = $this->helperService->createUrlWithParams($baseUrl, $params);  // パラメータ付きのリクエストURLを取得
+    //         $json_str = file_get_contents($url);    // URLからAPIを実行
+    //         $movie = json_decode($json_str);     // jsonをobjectに変換
+    //
+    //         if ($movie) {
+    //             $movie->favorite = false;
+    //             $movie->watched = false;
+    //             $movie->avgRating = 0;
+    //         }
+    //     }
+    //     $movieWithAvgRatingAndUserInfo = $this->movieService->getMovieWithAvgRatingAndUserInfo($request->input('movieId'), $request->input('userId'));
+    //     \Debugbar::info($movieWithAvgRatingAndUserInfo);
+    //     if ($movieWithAvgRatingAndUserInfo) {
+    //         $movie->favorite = $movieWithAvgRatingAndUserInfo->users->favorite;
+    //         $movie->watched = $movieWithAvgRatingAndUserInfo->users->watched;
+    //         $movie->avgRating = $movieWithAvgRatingAndUserInfo->avgRating;
+    //     }
+    //     // return $movie;
     // }
+    public function getMovieById(Request $request) {
+        $baseUrl  = 'https://api.themoviedb.org/3/movie/'.$request->input('movieId');    // リクエストのベースURL
+        /*
+        * リクエストパラメータを生成
+        * api_key            : APIキー
+        * language           : 言語
+        * append_to_response : 検索オプション
+        */
+        $params      = array('api_key'=>env('TMDB_ACCESSKEY'), 'language'=>'ja', 'append_to_response'=>'credits,videos');
+        $url         = $this->helperService->createUrlWithParams($baseUrl, $params);  // パラメータ付きのリクエストURLを取得
+        $json_str    = file_get_contents($url);    // URLからAPIを実行
+        $movie       = json_decode($json_str);     // jsonをobjectに変換
+        if ($movie) {
+            $movie->favorite = 0;
+            $movie->watched = 0;
+            $movie->rating = 0;
+            $movie->avgRating = 0;
+            $movie->posts = null;
+        }
+        $movieWithAvgRatingAndUserInfo = $this->movieService->getMovieWithAvgRatingAndUserInfo($request->input('movieId'), $request->input('userId'));
+        if ($movieWithAvgRatingAndUserInfo) {
+            if (count($movieWithAvgRatingAndUserInfo->users)) {
+                $movie->favorite = $movieWithAvgRatingAndUserInfo->users[0]->pivot->favorite;
+                $movie->watched = $movieWithAvgRatingAndUserInfo->users[0]->pivot->watched;
+                $movie->rating = $movieWithAvgRatingAndUserInfo->users[0]->pivot->rating;
+                $movie->posts = $movieWithAvgRatingAndUserInfo->posts;
+            }
+            $movie->avgRating = intval($movieWithAvgRatingAndUserInfo->avgRating);
+        }
+        \Debugbar::info($movieWithAvgRatingAndUserInfo);
+        return response()->json($movie);
+    }
 
     // private function getTrailer($id) {
     //     $baseUrl = 'https://api.themoviedb.org/3/movie/'.$id;   // リクエストのベースURL

@@ -6,6 +6,7 @@ const state = {
 }
 
 const getters = {
+    profileImage: state => state.user ? state.user.profile_image : '',
     username: state => state.user ? state.user.name : '',
     user: state => state.user
 }
@@ -23,30 +24,50 @@ const actions = {
     // 引数usernameからuser情報を取得
     async setUser (context, username) {
         context.commit('setApiStatus', null);
+        context.commit('movie/setMovies', null, { root: true });
+        context.commit('post/setPosts', null, { root: true });
         const response = await axios.get('/api/user', {
             params: {
                 username
             }
         });
+        console.log(response.data)
+        if (response.status === OK) {
+            context.commit('setApiStatus', true);
+            context.commit('setUser', response.data);
+            context.commit('movie/setMovies', response.data.movies, { root: true });
+            context.commit('post/setPosts', response.data.posts, { root: true });
+            return false;
+        }
+    },
+    async setUpAccount (context, setUpInfo) {
+        context.commit('setApiStatus', null);
+        const response = await axios.post('/api/user/account', {
+            params: {
+                setUpInfo
+            }
+        });
+        console.log(response);
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('setUser', response.data);
             return false;
         }
     },
-    async getAllAttachedMovies (context, username) {
-        context.commit('setApiStatus', null);
-        const response = await axios.get('/api/user/movie', {
-            params: {
-                username
-            }
-        });
-        if (response.status === OK) {
-            context.commit('setApiStatus', true);
-            context.commit('movie/setMovies', response.data, { root: true });
-            return false;
-        }
-    },
+    // async getAllAttachedMovies (context, username) {
+    //     context.commit('setApiStatus', null);
+    //     const response = await axios.get('/api/user/movie', {
+    //         params: {
+    //             username
+    //         }
+    //     });
+    //     console.log(response.data)
+    //     if (response.status === OK) {
+    //         context.commit('setApiStatus', true);
+    //         context.commit('movie/setMovies', response.data, { root: true });
+    //         return false;
+    //     }
+    // },
     async editFavoriteMovie (context, { favorite, movie }) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/movie/fav',{
@@ -55,7 +76,7 @@ const actions = {
         });
         if (response.status === OK) {
             context.commit('setApiStatus', true);
-            context.commit('movie/setMovies', response.data, { root: true });
+            context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
         }
     },
@@ -67,7 +88,7 @@ const actions = {
         });
         if (response.status === OK) {
             context.commit('setApiStatus', true);
-            context.commit('movie/setMovies', response.data, { root: true });
+            context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
         }
     },
@@ -77,10 +98,9 @@ const actions = {
             rating: rating,
             movie: movie,
         });
-        console.log(response.data)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
-            context.commit('movie/setMovies', response.data, { root: true });
+            context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
         }
     },

@@ -1,11 +1,7 @@
 <template>
     <div class="favorite-action">
-        <a href="#" class="fa fa-heart favorite" v-bind:class="{ active: favorite }" v-on:click="doFavoriteAction()">
-            <!-- <span class="fa fa-heart" v-bind:class="{ active: favorite }" aria-hidden="true"></span> -->
-        </a>
-        <!-- <div class="balloon favorite">
-            お気に入り
-        </div> -->
+        <span class="fa fa-heart favorite action" v-bind:class="{ active: favoriteData }" v-on:click="doFavoriteAction()">
+        </span>
     </div>
 </template>
 <script>
@@ -14,16 +10,21 @@ export default {
         movie: {
             type: null,
             required: true,
+        },
+        favorite: {
+            type: Number,
+            required: true,
         }
     },
-    computed: {
-        favorite () {
-            return this.movie.users[0].pivot.favorite;
+    data () {
+        return {
+            favoriteData: this.favorite,
         }
     },
     methods: {
         doFavoriteAction: async function() {
-            await this.$store.dispatch('user/editFavoriteMovie', { favorite: !this.favorite, movie: this.movie });
+            this.favoriteData = !this.favoriteData;
+            await this.$store.dispatch('user/editFavoriteMovie', { favorite: this.favoriteData, movie: this.movie });
         },
     }
 }

@@ -46,6 +46,13 @@ interface UserRepositoryInterface
      */
     public function editMovieRating($user, $rating, $movie_id);
 
+    /**
+     * 評価を編集
+     *
+     */
+    public function editAccount($user, $username, $imageUrl);
+
+
     // /**
     //  * userとmovieの紐づき情報を取得(条件：movie_id)
     //  *

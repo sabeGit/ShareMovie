@@ -42,6 +42,10 @@ class UserService {
         return $this->userRepo->editMovieRating($user, $rating, $movie_id);
     }
 
+    public function editAccount($user, $username, $imageUrl) {
+        return $this->userRepo->editAccount($user, $username, $imageUrl);
+    }
+
     /**
      * userコレクションに紐づいた映画idを抽出
      *

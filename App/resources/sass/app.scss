@@ -15,7 +15,7 @@ $color-not-watched: #ff69a3;
 * ページ共通
 */
 .container {
-    max-width: 1500px;
+    min-width: 1350px;
 }
 dt {
     float: left ;
@@ -32,6 +32,19 @@ dd {
 }
 a {
     text-decoration: none;
+}
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+a.list-group-item {
+    color: darkgray;
+    float: left;
+    text-decoration: none;
+}
+.vue-contents {
+    margin: auto;
 }
 
 /*
@@ -65,11 +78,17 @@ a {
     display: flex;
     flex-wrap: wrap;
 }
+.search-form {
+    display: contents;
+}
 .nav-item.search {
     display: flex;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+}
+.fa.fa-search {
+    width: 50px;
 }
 .nav-item.login, .nav-item.register {
     float: left;
@@ -82,7 +101,7 @@ a {
     border-radius: 0rem 0.25rem 0.25rem 0rem;
 }
 .nav-link.home {
-    color: black;
+    color: #3c3c3c;;
     font-size: 130%;
 }
 
@@ -103,30 +122,48 @@ a {
 }
 
 /*
-* movies.showページ（映画詳細画面）
+* 映画検索結果画面
 */
+.avg-rating-section {
+    margin-top: 30px;
+}
+
+/*
+* 映画詳細画面
+*/
+.row.movie-detail {
+    margin-bottom: 30px;
+}
+.poster-img-area {
+    float: left;
+    width: 30%;
+}
+.movie-detail-area {
+    float: left;
+    width: 70%;
+    margin-top: 20px;
+}
 .card-img-top.img-show {
     float: left;
 }
 .poster-img.movie-detail {
-    width: 300px;
-    height: 450px;
+    width: 100%;
+    height: 100%;
 }
 .card.card-show.movie-detail {
     display: inline-block;
     border: initial;
     width: auto;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 .movie-title.movie-detail {
     margin-bottom: 10px;
-    color: black;
+    color: #3c3c3c;;
     position: relative;
     margin: auto;
+    float: left;
 }
-// a.movie-title.movie-detail:hover {
-//     color: #4c4c4c;
-//     text-decoration: none;
-// }
 .movie-overview.movie-detail {
     float: left;
     margin-top: 10px;
@@ -143,17 +180,34 @@ a {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.post-section {
+    margin: auto;
+}
+.post-action {
+    width: -webkit-fill-available;
+}
+button.btn.btn-primary.post {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.post-count {
+    font-weight: bold;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid #e8e8e8;
+}
 
 /*
 * movie.showページ modal
 */
 .btn.btn-secondary {
     background-color: white;
-    color: black;
+    color: #3c3c3c;;
 }
 
 /*
-* マイページ（ユーザ詳細画面）
+* マイページ（ユーザー詳細画面）
 */
 .user-item-list {
     list-style: none;
@@ -167,6 +221,28 @@ a {
     position: absolute;
     bottom: 0;
 }
+a.list-group-item:hover {
+    font-weight: bold;
+    color: #3c3c3c;;
+    border-right: 3px solid #3490dc;
+}
+a.list-group-item.active {
+    font-weight: bold;
+    color: #3c3c3c;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    background-color: #fff;
+    border-right: 3px solid #3490dc;
+}
+
+/*
+* ユーザー設定画面
+*/
+.setting-contents {
+    background-color: #ffffff;
+}
+.file-upload {
+    display: flex;
+}
 
 /*
 * 映画リスト
@@ -178,7 +254,7 @@ a {
     border: 1px solid #e3e3e3;
     box-shadow: 0 2px 4px #e3e3e3;
     background-color: #f5f5f5;
-    margin-top: 40px;
+    margin-bottom: 40px;
     display: flex;
     min-width: 550px;
 }
@@ -200,7 +276,7 @@ a {
     margin-top: 8px;
     top: 0;
     position: absolute;
-    color: black;
+    color: #3c3c3c;;
 }
 .movie-body > .movie-overview {
     margin-left: 15px;
@@ -229,6 +305,52 @@ a {
 }
 
 /*
+* コメントリスト
+*/
+.post-list {
+    margin: auto;
+}
+.post-item {
+    padding: 10px;
+    border-top: 1px solid #e8e8e8;
+}
+.post-movie-info {
+    font-size: 13px;
+}
+.post-movie-title {
+    float: left;
+    font-weight: bold;
+    color: #3c3c3c;
+}
+.post-movie-title-suffix {
+    margin: auto;
+}
+.post-profile-image {
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+.post-user-info-link-image {
+    float: left;
+    margin-right: 15px;
+}
+.post-user-info-link-name {
+    float: left;
+    margin-right: 15px;
+}
+.post-username {
+    font-weight: bold;
+    color: #3c3c3c;
+    float: left;
+}
+.post-at {
+    margin: auto;
+}
+.post-content {
+
+}
+
+/*
 * RateAction
 */
 .rate-action {
@@ -246,60 +368,76 @@ a {
     border-left: 0;
     margin-left: 0;
 }
-.star-rating {
-    font-size: 0;
-    white-space: nowrap;
-    display: inline-block;
-    width: 125px;
-    height: 25px;
-    overflow: hidden;
-    position: relative;
-    background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#DDDDDD" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
-    background-size: contain;
-    float: left;
-    margin: 5px;
-}
-.star-rating i {
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 20%;
-    z-index: 1;
-    background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#FFDF88" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
-    background-size: contain;
-}
-.star-rating input {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    opacity: 0;
-    display: inline-block;
-    width: 20%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    z-index: 2;
-    position: relative;
-}
-.star-rating.editable input {
+// .star-rating {
+//     font-size: 0;
+//     white-space: nowrap;
+//     display: inline-block;
+//     width: 125px;
+//     height: 25px;
+//     overflow: hidden;
+//     position: relative;
+//     background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#DDDDDD" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+//     background-size: contain;
+//     float: left;
+//     margin: 5px;
+// }
+// .star-rating i {
+//     opacity: 0;
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     height: 100%;
+//     width: 20%;
+//     z-index: 1;
+//     background: url('data:image/svg+xml;utf-8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"><polygon fill="#FFDF88" points="10,0 13.09,6.583 20,7.639 15,12.764 16.18,20 10,16.583 3.82,20 5,12.764 0,7.639 6.91,6.583 "/></svg>');
+//     background-size: contain;
+// }
+// .star-rating input {
+//     -moz-appearance: none;
+//     -webkit-appearance: none;
+//     opacity: 0;
+//     display: inline-block;
+//     width: 20%;
+//     height: 100%;
+//     margin: 0;
+//     padding: 0;
+//     z-index: 2;
+//     position: relative;
+// }
+// .star-rating.editable input {
+//     cursor: pointer;
+// }
+// .star-rating.editable input:hover + i,
+// .star-rating input:checked + i {
+//     opacity: 1;
+// }
+// .star-rating i ~ i {
+//     width: 40%;
+// }
+// .star-rating i ~ i ~ i {
+//     width: 60%;
+// }
+// .star-rating i ~ i ~ i ~ i {
+//     width: 80%;
+// }
+// .star-rating i ~ i ~ i ~ i ~ i {
+//     width: 100%;
+// }
+.star-rating.editable > .fa.fa-star {
+    color: #ffcc33;
+    font-size: 23px;
     cursor: pointer;
 }
-.star-rating.editable input:hover + i,
-.star-rating input:checked + i {
-    opacity: 1;
+.star-rating.read-only > .fa.fa-star {
+    color: #ffcc33;
+    font-size: 23px;
 }
-.star-rating i ~ i {
-    width: 40%;
+.star-rating.editable > .fa.fa-star-o {
+    font-size: 23px;
+    cursor: pointer;
 }
-.star-rating i ~ i ~ i {
-    width: 60%;
-}
-.star-rating i ~ i ~ i ~ i {
-    width: 80%;
-}
-.star-rating i ~ i ~ i ~ i ~ i {
-    width: 100%;
+.star-rating.read-only > .fa.fa-star-o {
+    font-size: 23px;
 }
 .choice {
     position: fixed;
@@ -319,58 +457,20 @@ a {
     border: solid 2px darkgray;
     border-radius: 5px;
     margin-left: 15px;
+    cursor: pointer;
 }
-a.favorite {
+.favorite.action {
     font-size: 25px;
     color: darkgray;
     float: left;
     text-decoration: none;
     margin: 5px;
 }
-a.favorite.active {
+.favorite.action.active {
     color: red;
 }
-a.favorite:hover {
+.favorite.action:hover {
     color: red;
-}
-.favorite:hover + .balloon {
-    display: block;
-}
-/* 吹き出し本体 */
-.balloon{
-    display: none;
-    position: absolute;
-    padding: 20px;
-    background-color: #ffadad;
-    border: 2px solid #ca8888;
-}
-
-/* beforeで枠線の三角を表現 */
-.balloon::before{
-    content: '';
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    left: 20px;
-    top: -15px;
-    border-right: 15px solid transparent;
-    border-bottom: 15px solid #ca8888;
-    border-left: 15px solid transparent;
-}
-
-/* beforeで本体の三角を表現 */
-.balloon::after{
-    content: '';
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    left: 20px;
-    top: -12px;
-    border-right: 15px solid transparent;
-    border-bottom: 15px solid #ffadad;
-    border-left: 15px solid transparent;
 }
 // .action.favorite > span {
 //     font-size: 25px;
@@ -408,22 +508,20 @@ a.favorite:hover {
     border: solid 2px darkgray;
     border-radius: 5px 0px 0px 5px;
     margin-left: 15px;
+    cursor: pointer;
 }
-a.watched {
+.watched.action {
     font-size: 25px;
     color: darkgray;
     float: left;
     text-decoration: none;
     margin: 5px;
 }
-a.watched.active {
+.watched.action.active {
     color: royalblue;
 }
-a.watched:hover {
+.watched.action:hover {
     color: royalblue;
-}
-.watched:hover + .balloon {
-    display: inline;
 }
 // a.action.watched {
 //     padding: 0.5em 1em;

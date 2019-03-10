@@ -6,17 +6,16 @@
             </div>
             <div class="movie-content">
                 <div class="movie-header">
-                    <h2 class="movie-title">{{ movie.title }}</h2>
+                    <RouterLink class="movie-title" v-bind:to="{ name : 'MovieDetail', params : { id: movie.id }}">{{ movie.title }}</RouterLink>
+                    <div class="avg-rating-section">
+                        <div class="rate-action read-only">
+                            <p class="rating-label">平均評価：</p>
+                            <RateAction :movie="movie" :rating="movie.avgRating" :isEditable="false"></RateAction>
+                        </div>
+                    </div>
                 </div>
                 <div class="movie-body">
                     <p class="movie-overview" style="-webkit-box-orient: vertical;">{{ movie.overview }}</p>
-                </div>
-                <div class="movie-footer">
-                    <form>
-                        <WatchedAction :movie="movie"></WatchedAction>
-                        <RateAction :movie="movie" :isEditable="false"></RateAction>
-                        <FavAction :movie="movie"></FavAction>
-                    </form>
                 </div>
             </div>
         </div>
@@ -24,18 +23,19 @@
 </template>
 <script>
 import RateAction from './../../components/movies/RateAction.vue'
-import WatchedAction from './../../components/movies/WatchedAction.vue'
-import FavAction from './../../components/movies/FavAction.vue'
-
 export default {
     components: {
-        RateAction,
-        WatchedAction,
-        FavAction,
+        RateAction
     },
+    // props: {
+    //     isEditable: {
+    //         type: Boolean,
+    //         required: true,
+    //     }
+    // },
     computed: {
         movieList () {
-            return this.$store.getters['movie/filteredMovies'];
+            return this.$store.getters['movie/movies'];
         }
     },
 }

@@ -41,14 +41,12 @@ export default {
         getFavMovies: function() {
             this.favorite = true;
             this.watched = false;
-
             this.$store.commit('movie/setIsFavFilter', this.favorite);
             this.$store.commit('movie/setIsWatchedFilter', this.watched);
         },
         getWatchedMovies: function() {
             this.favorite = false;
             this.watched = true;
-
             this.$store.commit('movie/setIsFavFilter', this.favorite);
             this.$store.commit('movie/setIsWatchedFilter', this.watched);
         },
@@ -57,14 +55,11 @@ export default {
             if (item === 'favorite') {
                 this.favorite = true;
                 this.watched = false;
-                // movieList = this.$store.getters['movie/favMovies'];
             } else if (item === 'watched') {
                 this.watched = true;
-                // movieList = this.$store.getters['movie/watchedMovies'];
             }
             this.$store.commit('movie/setIsFavList', this.favorite);
             this.$store.commit('movie/setIsWatchedList', this.watched);
-            // this.$emit('setMovieList', movieList);
         }
     }
 }

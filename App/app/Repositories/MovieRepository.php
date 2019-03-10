@@ -27,12 +27,12 @@ class MovieRepository implements MovieRepositoryInterface {
      * @var $obj id, title, poster_path, overview
      * @return Illuminate\Database\Eloquent\Model
      */
-    public function create($obj) {
+    public function create($movie) {
         $movie = Movie::updateOrCreate(
-            ['id' => $obj->id],
-            ['title'       => $obj->title,
-             'poster_path' => $obj->poster_path,
-             'overview'    => $obj->overview]
+            ['id' => $movie['id']],
+            ['title'       => $movie['title'],
+             'poster_path' => $movie['poster_path'],
+             'overview'    => $movie['overview']]
         );
         return $movie;
     }
@@ -59,12 +59,12 @@ class MovieRepository implements MovieRepositoryInterface {
     }
 
     /**
-     * 映画の平均評価を取得
+     * 映画の平均評価を取得（ユーザー情報付き）
      *
      * @param array|$movieIds|映画id
      * @return Movie|平均評価付き映画
      */
-    public function getMoviesWithAvgRating($movieIds, $user_id) {
+    public function getMoviesWithAvgRatingAndUserInfo($movieIds, $user_id) {
         return $movies = Movie::with([
             'users' => function($query) use($user_id) {
                 $query->where('id', $user_id);
@@ -75,16 +75,29 @@ class MovieRepository implements MovieRepositoryInterface {
     /**
      * 映画の平均評価を取得
      *
+     * @param array|$movieIds|映画id
+     * @return Movie|平均評価付き映画
+     */
+    public function getMoviesWithAvgRating($movieIds) {
+        return $movies = Movie::with(['avgRating', 'staffs'])->whereIn('id', $movieIds)->get();
+    }
+
+    /**
+     * 映画の平均評価を取得（ユーザー情報付き）
+     *
      * @param int|$movie_id|映画id
      * @return Movie|平均評価付き映画
      */
-    public function getMovieWithAvgRating($movie_id, $user_id) {
+    public function getMovieWithAvgRatingAndUserInfo($movie_id, $user_id) {
         return $movie = Movie::with([
-            'movieWithAvgRating',
+            'avgRating',
             'users' => function($query) use($user_id) {
-                $query->where('id', $user_id);
+                $query->where('id', $user_id)->first();
             },
-            'staffs'])->where('id', $movie_id)->first();
+            'staffs',
+            'posts.user',
+            'posts.movie'
+        ])->where('id', $movie_id)->first();
     }
 
     // /**
@@ -94,7 +107,7 @@ class MovieRepository implements MovieRepositoryInterface {
     //  * @return Movie|$movie
     //  */
     // public function getMoviesWithAvgRatingById($movie_id) {
-    //     // return $movie = Movie::with('movieWithAvgRating')->where('id', $movie_id)->get();
+    //     // return $movie = Movie::with('avgRating')->where('id', $movie_id)->get();
     //     // return $movie = Movie::with('users')->where('id', $movie_id)->first();
     //     return Movie::all();
     // }

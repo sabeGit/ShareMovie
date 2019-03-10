@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DeleteRatingPosts extends Migration
+class SetFavoriteAndwatchedDefaultValueMovieUserRels extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class DeleteRatingPosts extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('rating');
+        Schema::table('movie_user_rels', function (Blueprint $table) {
+            $table->dropColumn('favorite');
+            $table->dropColumn('watched');
         });
     }
 
@@ -25,8 +26,9 @@ class DeleteRatingPosts extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->integer('rating')->nullable();
+        Schema::table('movie_user_rels', function (Blueprint $table) {
+            $table->boolean('favorite');
+            $table->boolean('watched');
         });
     }
 }

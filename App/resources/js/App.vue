@@ -5,7 +5,6 @@
         </header>
         <main>
             <div class="container">
-                <NoticeMessage />
                 <RouterView />
             </div>
         </main>
