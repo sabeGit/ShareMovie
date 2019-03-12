@@ -31,6 +31,8 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@resetPassword')->na
 Route::get('/movie/search', 'MovieController@search')->name('searchMovies');
 
 Route::get('/movie', 'MovieController@getMovieById')->name('getMovieById');
+//人気映画をTMDBから取得
+Route::get('/movie/popular', 'MovieController@getPopularMovieFromTMDB')->name('getPopularMovieFromTMDB');
 
 Route::get('/user', 'UserController@getUserByName')->name('getUser');
 

@@ -4,18 +4,7 @@
                 <div class="nav-item home">
                     <RouterLink class="nav-link home" to="/">ShareMovie</RouterLink>
                 </div>
-                <div class="nav-item search">
-                    <!-- <form class="search-form" v-on:submit.prevent="searchMovie()">
-                    <input type="text" class="form-control search" name="freeword" placeholder="検索" v-model="freeword">
-                        <span class="input-group-btn">
-            	            <button type="submit" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
-                       </span>
-                   </form> -->
-                   <input type="text" class="form-control search" name="freeword" placeholder="検索" v-model="freeword">
-                       <span class="input-group-btn">
-                           <button type="submit" class="btn btn-default" v-on:click="searchMovie()"><span class="fa fa-search" aria-hidden="true"></span></button>
-                      </span>
-                </div>
+                <SearchMovie />
                 <div v-if="isLogin" class="nav-item user">
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -23,7 +12,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <RouterLink class="dropdown-item" v-bind:to="{ name : 'UserDetail', params : { username: username }}">
+                            <RouterLink class="dropdown-item" v-bind:to="{ name : 'UserDetail', params : { username: username, option: 'post' }}">
                                 マイページ
                             </RouterLink>
                             <RouterLink class="dropdown-item" v-bind:to="{ name : 'UserSetUpAccount'}">
@@ -48,7 +37,12 @@
     </nav>
 </template>
 <script>
+import SearchMovie from './../../components/movies/SearchMovie.vue'
+
 export default {
+    components: {
+        SearchMovie,
+    },
     data() {
         return {
             freeword: ''
