@@ -16,29 +16,12 @@
             <p class="post-content">
                 {{ post.content }}
             </p>
-            <!-- <div class="poster">
-                <img class="poster-img" v-bind:src="post.movie.poster_full_path" alt="Sample">
-            </div>
-            <div class="post-content">
-                <div class="post-header">
-                    <RouterLink class="post-movie-title" v-bind:to="{ name : 'MovieDetail', params : { id: post.movie.id }}">{{ post.movie.title }}</RouterLink>
-                </div>
-                <div class="post-body">
-                    <p class="post-content" style="-webkit-box-orient: vertical;">{{ post.content }}</p>
-                </div>
-            </div> -->
         </div>
     </div>
 </template>
 <script>
 
 export default {
-    props: {
-        isEditable: {
-            type: Boolean,
-            required: true,
-        }
-    },
     computed: {
         posts () {
             return this.$store.getters['post/posts'];

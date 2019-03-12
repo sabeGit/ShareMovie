@@ -90,6 +90,16 @@ const actions = {
             context.commit('setMovies', response.data);
             return false;
         }
+    },
+    async getPopularMovieFromTMDB (context) {
+        context.commit('setApiStatus', null);
+        const response = await axios.get('/api/movie/popular');
+        console.log(response);
+        if (response.status === OK) {
+            context.commit('setApiStatus', true);
+            context.commit('setMovies', response.data);
+            return false;
+        }
     }
 }
 
