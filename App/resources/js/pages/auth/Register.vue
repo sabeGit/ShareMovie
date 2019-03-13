@@ -60,15 +60,17 @@ export default {
     computed: {
         registerErrors () {
             return this.$store.state.auth.registerErrorMessages;
+        },
+        apiStatus () {
+            return this.$store.getters['auth/apiStatus'];
         }
     },
     methods: {
         async register () {
             // authストアのregisterアクションの呼び出し
             await this.$store.dispatch('auth/register', this.registerForm);
-
             if (this.apiStatus) {
-                this.$router.push('/');
+                this.$router.push({ name: 'PreRegister' });
             }
         }
     }

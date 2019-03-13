@@ -1809,6 +1809,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   computed: {
     errorCode: function errorCode() {
       return this.$store.state.error.code;
+    },
+    beforeAuthPagePath: function beforeAuthPagePath() {
+      return this.$store.getters['auth/beforeAuthPagePath'];
     }
   },
   watch: {
@@ -1823,6 +1826,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 case 0:
                   if (val === _util__WEBPACK_IMPORTED_MODULE_3__["INTERNAL_SERVER_ERROR"]) {
                     this.$router.push('/500');
+                  } else if (val === _util__WEBPACK_IMPORTED_MODULE_3__["UNAUTHORIZED"]) {
+                    this.$router.push({
+                      name: 'Login',
+                      query: {
+                        redirect: this.beforeAuthPagePath
+                      }
+                    });
                   }
 
                 case 1:
@@ -2762,16 +2772,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         email: '',
         password: '',
         remember: false
-      }
+      },
+      loginedPushPath: null
     };
   },
   computed: {
     apiStatus: function apiStatus() {
-      return this.$store.state.auth.apiStatus;
+      return this.$store.getters['auth/apiStatus'];
+    },
+    loginUser: function loginUser() {
+      return this.$store.getters['auth/loginUser'];
     },
     loginErrors: function loginErrors() {
       return this.$store.state.auth.loginErrorMessages;
     }
+  },
+  created: function created() {
+    this.loginedPushPath = this.$route.query.redirect;
   },
   methods: {
     login: function () {
@@ -2786,11 +2803,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return this.$store.dispatch('auth/login', this.loginForm);
 
               case 2:
+                console.log(this.loginedPushPath);
+                console.log(this.apiStatus);
+                console.log(this.loginUser);
+                console.log(this.loginUser['name']);
+
                 if (this.apiStatus) {
-                  this.$router.push('/');
+                  if (this.loginedPushPath != null) {
+                    this.$router.push(this.loginedPushPath);
+                  } else {
+                    this.$router.push({
+                      name: 'UserDetail',
+                      params: {
+                        username: this.loginUser['name'],
+                        option: 'post'
+                      }
+                    });
+                  }
                 }
 
-              case 3:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -3097,6 +3129,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   computed: {
     registerErrors: function registerErrors() {
       return this.$store.state.auth.registerErrorMessages;
+    },
+    apiStatus: function apiStatus() {
+      return this.$store.getters['auth/apiStatus'];
     }
   },
   methods: {
@@ -3113,7 +3148,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 if (this.apiStatus) {
-                  this.$router.push('/');
+                  this.$router.push({
+                    name: 'PreRegister'
+                  });
                 }
 
               case 3:
@@ -59195,8 +59232,9 @@ var state = {
   apiStatus: null,
   loginErrorMessages: null,
   isLoggedIn: !!localStorage.getItem('token'),
-  isRegistered: 0 //0:結果待ち, 1:登録成功, 2:登録失敗
-
+  isRegistered: 0,
+  //0:結果待ち, 1:登録成功, 2:登録失敗
+  beforeAuthPagePath: ''
 };
 var getters = {
   user: function user(state) {
@@ -59213,6 +59251,12 @@ var getters = {
   },
   isRegistered: function isRegistered(state) {
     return state.isRegistered;
+  },
+  apiStatus: function apiStatus(state) {
+    return state.apiStatus;
+  },
+  beforeAuthPagePath: function beforeAuthPagePath(state) {
+    return state.beforeAuthPagePath;
   }
 };
 var mutations = {
@@ -59230,6 +59274,9 @@ var mutations = {
   },
   setRegisterErrorMessages: function setRegisterErrorMessages(state, messages) {
     state.setRegisterErrorMessages = messages;
+  },
+  setBeforeAuthPagePath: function setBeforeAuthPagePath(state, path) {
+    state.beforeAuthPagePath = path;
   },
   loginUser: function loginUser(state) {
     state.isLoggedIn = true;
@@ -59260,15 +59307,15 @@ var actions = {
               response = _context.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                _context.next = 8;
+                _context.next = 7;
                 break;
               }
 
-              context.commit('setApiStatus', true);
-              context.dispatch('currentUser');
+              context.commit('setApiStatus', true); // context.dispatch('currentUser');
+
               return _context.abrupt("return", false);
 
-            case 8:
+            case 7:
               context.commit('setApiStatus', false);
 
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
@@ -59279,7 +59326,7 @@ var actions = {
                 });
               }
 
-            case 10:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -59362,36 +59409,24 @@ var actions = {
 
             case 3:
               response = _context3.sent;
-              console.log(response.data);
+              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context3.next = 11;
+                _context3.next = 12;
                 break;
               }
 
               localStorage.setItem('token', response.data.access_token);
               context.commit('loginUser');
               context.commit('setApiStatus', true);
-              context.dispatch('currentUser');
-              return _context3.abrupt("return", false);
+              _context3.next = 11;
+              return context.dispatch('currentUser');
 
             case 11:
-              context.commit('setApiStatus', false);
+              return _context3.abrupt("return", false);
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.dispatch('noticeMessage/showFlashMessage', {
-                  text: _util__WEBPACK_IMPORTED_MODULE_1__["LOGIN_ERROR_MSG"],
-                  duration: 4000,
-                  mode: 'error'
-                }, {
-                  root: true
-                });
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
+            case 12:
+              context.commit('setApiStatus', false);
 
             case 13:
             case "end":
@@ -59472,9 +59507,10 @@ var actions = {
             case 3:
               response = _context5.sent;
               loginUser = response.data || null;
+              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context5.next = 9;
+                _context5.next = 10;
                 break;
               }
 
@@ -59482,13 +59518,13 @@ var actions = {
               context.commit('setLoginUser', loginUser);
               return _context5.abrupt("return", false);
 
-            case 9:
+            case 10:
               context.commit('setApiStatus', false);
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 11:
+            case 12:
             case "end":
               return _context5.stop();
           }
@@ -60343,20 +60379,6 @@ var actions = {
 
     return setUpAccount;
   }(),
-  // async getAllAttachedMovies (context, username) {
-  //     context.commit('setApiStatus', null);
-  //     const response = await axios.get('/api/user/movie', {
-  //         params: {
-  //             username
-  //         }
-  //     });
-  //     console.log(response.data)
-  //     if (response.status === OK) {
-  //         context.commit('setApiStatus', true);
-  //         context.commit('movie/setMovies', response.data, { root: true });
-  //         return false;
-  //     }
-  // },
   editFavoriteMovie: function () {
     var _editFavoriteMovie = _asyncToGenerator(
     /*#__PURE__*/
@@ -60378,7 +60400,7 @@ var actions = {
               response = _context3.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context3.next = 9;
+                _context3.next = 11;
                 break;
               }
 
@@ -60388,7 +60410,19 @@ var actions = {
               });
               return _context3.abrupt("return", false);
 
-            case 9:
+            case 11:
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
+                context.commit('auth/setBeforeAuthPagePath', location.pathname, {
+                  root: true
+                });
+              }
+
+            case 12:
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 13:
             case "end":
               return _context3.stop();
           }
@@ -60507,7 +60541,7 @@ var actions = {
 /*!******************************!*\
   !*** ./resources/js/util.js ***!
   \******************************/
-/*! exports provided: OK, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY, LOGIN_ERROR_MSG, getCookieArray */
+/*! exports provided: OK, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY, UNAUTHORIZED, LOGIN_ERROR_MSG, getCookieArray */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60516,12 +60550,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATED", function() { return CREATED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INTERNAL_SERVER_ERROR", function() { return INTERNAL_SERVER_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNPROCESSABLE_ENTITY", function() { return UNPROCESSABLE_ENTITY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNAUTHORIZED", function() { return UNAUTHORIZED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR_MSG", function() { return LOGIN_ERROR_MSG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookieArray", function() { return getCookieArray; });
 var OK = 200;
 var CREATED = 201;
 var INTERNAL_SERVER_ERROR = 500;
 var UNPROCESSABLE_ENTITY = 422;
+var UNAUTHORIZED = 401;
 var LOGIN_ERROR_MSG = '入力されたユーザー名やパスワードが正しくありません。確認してからやりなおしてください。';
 /**
  * クッキーの値を取得する
