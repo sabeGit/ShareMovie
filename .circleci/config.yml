@@ -9,5 +9,5 @@ deployment:
           revision_type: S3         # デプロイ履歴のソースコードをs3に保存する
           s3_location:
             bucket: share-movie-deploy     # デプロイ履歴のソースコードを保存するbucket名
-            key_pattern: {BRANCH}-{SHORT_COMMIT}.zip    # 保存時のファイル名
+            key_pattern: {BRANCH}{SHORT_COMMIT}.zip    # 保存時のファイル名
         deployment_group: all
