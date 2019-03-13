@@ -1,13 +1,6 @@
 deployment:
-  deploy:
-    branch: master                  # デプロイ対象にするブランチ名
-    codedeploy:                     # circleciでCodeDeployを使う
-      ShareMovie:   # CodeDeployのアプリケーション名にする
-        application_root: /
-        region: ap-northeast-1
-        revision_location:
-          revision_type: S3         # デプロイ履歴のソースコードをs3に保存する
-          s3_location:
-            bucket: share-movie-deploy     # デプロイ履歴のソースコードを保存するbucket名
-            key_pattern: {BRANCH}-{SHORT_COMMIT}.zip    # 保存時のファイル名
-        deployment_group: all
+  staging:
+    branch: master
+    codedeploy:
+      ShareMovie:
+        deployment_group: my-deployment-group
