@@ -6,7 +6,10 @@ const state = {
 }
 
 const getters = {
-    posts: state => state.posts
+    posts: state => state.posts,
+    postsCount: state => {
+        return state.posts ? state.posts.length : 0
+    },
 }
 
 const mutations = {

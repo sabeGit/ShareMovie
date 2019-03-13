@@ -1,4 +1,4 @@
-import { OK } from '../util'
+import { OK, UNAUTHORIZED } from '../util'
 
 const state = {
     user: null,
@@ -54,20 +54,6 @@ const actions = {
             return false;
         }
     },
-    // async getAllAttachedMovies (context, username) {
-    //     context.commit('setApiStatus', null);
-    //     const response = await axios.get('/api/user/movie', {
-    //         params: {
-    //             username
-    //         }
-    //     });
-    //     console.log(response.data)
-    //     if (response.status === OK) {
-    //         context.commit('setApiStatus', true);
-    //         context.commit('movie/setMovies', response.data, { root: true });
-    //         return false;
-    //     }
-    // },
     async editFavoriteMovie (context, { favorite, movie }) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/movie/fav',{
@@ -78,7 +64,10 @@ const actions = {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
+        } else if (response.status === UNAUTHORIZED) {
+            context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
+        context.commit('error/setCode', response.status, { root: true });
     },
     async editWatchedMovie (context, { watched, movie }) {
         context.commit('setApiStatus', null);

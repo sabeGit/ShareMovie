@@ -40,9 +40,9 @@
             </div>
         </div>
         <div class="post-section">
-            <p class="post-count">{{ movie.posts.length }}件のコメント</p>
+            <p class="post-count">{{ postsCount }}件のコメント</p>
             <PostAction :movie="movie"></PostAction>
-            <PostList :isEditable="false" v-if="posts"></PostList>
+            <PostList v-if="posts"></PostList>
         </div>
     </div>
 </template>
@@ -78,6 +78,9 @@ export default {
         },
         crews () {
             return this.movie ? this.movie.credits.crew.slice(0, 3) : null;
+        },
+        postsCount () {
+            return this.$store.getters['post/postsCount'];
         },
         posts () {
             return this.$store.getters['post/posts'];

@@ -7,6 +7,7 @@ const state = {
     loginErrorMessages: null,
     isLoggedIn: !!localStorage.getItem('token'),
     isRegistered: 0,    //0:結果待ち, 1:登録成功, 2:登録失敗
+    beforeAuthPagePath: '',
 }
 
 const getters = {
@@ -15,6 +16,8 @@ const getters = {
     username: state => state.loginUser ? state.loginUser.name : '',
     loginUser: state => state.loginUser,
     isRegistered: state => state.isRegistered,
+    apiStatus: state => state.apiStatus,
+    beforeAuthPagePath: state => state.beforeAuthPagePath,
 }
 
 const mutations = {
@@ -32,6 +35,9 @@ const mutations = {
     },
     setRegisterErrorMessages (state, messages) {
         state.setRegisterErrorMessages = messages;
+    },
+    setBeforeAuthPagePath (state, path) {
+        state.beforeAuthPagePath = path;
     },
     loginUser (state) {
         state.isLoggedIn = true;
@@ -51,7 +57,7 @@ const actions = {
         const response = await axios.post('/api/register', data);
         if (response.status === CREATED) {
             context.commit('setApiStatus', true);
-            context.dispatch('currentUser');
+            // context.dispatch('currentUser');
             return false;
         }
         context.commit('setApiStatus', false);
@@ -88,21 +94,15 @@ const actions = {
     async login (context, data) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/login', data);
-        console.log(response.data)
+        console.log(response)
         if (response.status === OK) {
             localStorage.setItem('token', response.data.access_token);
             context.commit('loginUser');
             context.commit('setApiStatus', true);
-            context.dispatch('currentUser');
+            await context.dispatch('currentUser');
             return false;
         }
         context.commit('setApiStatus', false);
-        if (response.status === UNPROCESSABLE_ENTITY) {
-            context.dispatch('noticeMessage/showFlashMessage', {text: LOGIN_ERROR_MSG, duration: 4000, mode: 'error'}, { root: true });
-            context.commit('setLoginErrorMessages', response.data.errors);
-        } else {
-            context.commit('error/setCode', response.status, { root: true });
-        }
     },
     // ログアウト
     async logout (context) {
@@ -123,6 +123,7 @@ const actions = {
         context.commit('setApiStatus', null);
         const response = await axios.get('/api/me');
         const loginUser = response.data || null;
+        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('setLoginUser', loginUser);

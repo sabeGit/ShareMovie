@@ -98,6 +98,16 @@ export default {
     methods: {
         checkUser: async function () {
             await this.$store.dispatch('user/setUser', this.$route.params.username);
+            // 並び替え検証
+            var array = this.$store.getters['movie/movies'].concat(this.$store.getters['post/posts']);
+            console.log(array);
+            array.sort(function(a,b){
+                if(a.updated_at < b.updated_at) return -1;
+                if(a.updated_at > b.updated_at) return 1;
+                return 0;
+            });
+            console.log(array);
+            // 並び替え検証
             if (this.loginUser && this.user && this.user.id === this.loginUser.id) {
                 this.isEditable = true;
             } else {
