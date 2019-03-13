@@ -13,7 +13,7 @@
 <script>
 import Navbar from './components/layouts/Navbar.vue'
 import NoticeMessage from './components/layouts/NoticeMessage.vue'
-import { INTERNAL_SERVER_ERROR } from './util';
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from './util';
 
 export default {
     components: {
@@ -23,6 +23,9 @@ export default {
     computed: {
         errorCode () {
             return this.$store.state.error.code;
+        },
+        beforeAuthPagePath () {
+            return this.$store.getters['auth/beforeAuthPagePath'];
         }
     },
     watch: {
@@ -30,6 +33,8 @@ export default {
             async handler (val) {
                 if (val === INTERNAL_SERVER_ERROR) {
                     this.$router.push('/500')
+                } else if (val === UNAUTHORIZED) {
+                    this.$router.push({ name: 'Login', query: { redirect: this.beforeAuthPagePath }});
                 }
             },
             immediate: true

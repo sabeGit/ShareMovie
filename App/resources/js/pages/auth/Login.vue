@@ -47,24 +47,38 @@ export default {
                 email: '',
                 password: '',
                 remember:false
-            }
+            },
+            loginedPushPath : null
         }
     },
     computed: {
         apiStatus () {
-            return this.$store.state.auth.apiStatus;
+            return this.$store.getters['auth/apiStatus'];
+        },
+        loginUser () {
+            return this.$store.getters['auth/loginUser'];
         },
         loginErrors () {
             return this.$store.state.auth.loginErrorMessages;
         }
     },
+    created () {
+        this.loginedPushPath = this.$route.query.redirect;
+    },
     methods: {
         login: async function () {
             // authストアのloginアクションを呼び出す
             await this.$store.dispatch('auth/login', this.loginForm);
-
+            console.log(this.loginedPushPath)
+            console.log(this.apiStatus)
+            console.log(this.loginUser)
+            console.log(this.loginUser['name'])
             if (this.apiStatus) {
-                this.$router.push('/');
+                if (this.loginedPushPath != null) {
+                    this.$router.push(this.loginedPushPath);
+                } else {
+                    this.$router.push({ name: 'UserDetail', params: { username: this.loginUser['name'], option: 'post' }});
+                }
             }
         }
     }
