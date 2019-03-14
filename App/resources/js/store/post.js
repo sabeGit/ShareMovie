@@ -28,12 +28,14 @@ const actions = {
             content: content,
             movie: movie,
         });
-        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data, { root: true });
             return false;
+        } else if (response.status === UNAUTHORIZED) {
+            context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
+        context.commit('error/setCode', response.status, { root: true });
     },
 }
 

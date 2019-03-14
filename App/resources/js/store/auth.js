@@ -196,7 +196,6 @@ const actions = {
                 user : context.state.user,
             }
         });
-        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             return false;
