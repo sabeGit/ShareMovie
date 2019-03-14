@@ -1,0 +1,6 @@
+deployment:
+  staging:
+    branch: master
+    codedeploy:
+      ShareMovie:
+        deployment_group: my-deployment-group
