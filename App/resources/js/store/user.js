@@ -52,7 +52,10 @@ const actions = {
             context.commit('setApiStatus', true);
             context.commit('setUser', response.data);
             return false;
+        } else if (response.status === UNAUTHORIZED) {
+            context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
+        context.commit('error/setCode', response.status, { root: true });
     },
     async editFavoriteMovie (context, { favorite, movie }) {
         context.commit('setApiStatus', null);
@@ -79,7 +82,10 @@ const actions = {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
+        } else if (response.status === UNAUTHORIZED) {
+            context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
+        context.commit('error/setCode', response.status, { root: true });
     },
     async editMovieRating (context, { rating, movie }) {
         context.commit('setApiStatus', null);
@@ -91,7 +97,10 @@ const actions = {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
             return false;
+        } else if (response.status === UNAUTHORIZED) {
+            context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
+        context.commit('error/setCode', response.status, { root: true });
     },
 }
 
