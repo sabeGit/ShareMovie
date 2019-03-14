@@ -59719,17 +59719,16 @@ var actions = {
 
             case 4:
               response = _context9.sent;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context9.next = 9;
+                _context9.next = 8;
                 break;
               }
 
               context.commit('setApiStatus', true);
               return _context9.abrupt("return", false);
 
-            case 9:
+            case 8:
               context.commit('setApiStatus', false);
 
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
@@ -59740,7 +59739,7 @@ var actions = {
                 });
               }
 
-            case 11:
+            case 10:
             case "end":
               return _context9.stop();
           }
@@ -60197,10 +60196,9 @@ var actions = {
 
             case 4:
               response = _context.sent;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context.next = 10;
+                _context.next = 11;
                 break;
               }
 
@@ -60210,7 +60208,19 @@ var actions = {
               });
               return _context.abrupt("return", false);
 
-            case 10:
+            case 11:
+              if (response.status === UNAUTHORIZED) {
+                context.commit('auth/setBeforeAuthPagePath', location.pathname, {
+                  root: true
+                });
+              }
+
+            case 12:
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -60304,10 +60314,9 @@ var actions = {
 
             case 5:
               response = _context.sent;
-              console.log(response.data);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context.next = 13;
+                _context.next = 12;
                 break;
               }
 
@@ -60321,7 +60330,7 @@ var actions = {
               });
               return _context.abrupt("return", false);
 
-            case 13:
+            case 12:
             case "end":
               return _context.stop();
           }
@@ -60354,10 +60363,9 @@ var actions = {
 
             case 3:
               response = _context2.sent;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context2.next = 9;
+                _context2.next = 10;
                 break;
               }
 
@@ -60365,7 +60373,19 @@ var actions = {
               context.commit('setUser', response.data);
               return _context2.abrupt("return", false);
 
-            case 9:
+            case 10:
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
+                context.commit('auth/setBeforeAuthPagePath', location.pathname, {
+                  root: true
+                });
+              }
+
+            case 11:
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 12:
             case "end":
               return _context2.stop();
           }
@@ -60457,7 +60477,7 @@ var actions = {
               response = _context4.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context4.next = 9;
+                _context4.next = 11;
                 break;
               }
 
@@ -60467,7 +60487,19 @@ var actions = {
               });
               return _context4.abrupt("return", false);
 
-            case 9:
+            case 11:
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
+                context.commit('auth/setBeforeAuthPagePath', location.pathname, {
+                  root: true
+                });
+              }
+
+            case 12:
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 13:
             case "end":
               return _context4.stop();
           }
@@ -60502,7 +60534,7 @@ var actions = {
               response = _context5.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context5.next = 9;
+                _context5.next = 11;
                 break;
               }
 
@@ -60512,7 +60544,19 @@ var actions = {
               });
               return _context5.abrupt("return", false);
 
-            case 9:
+            case 11:
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
+                context.commit('auth/setBeforeAuthPagePath', location.pathname, {
+                  root: true
+                });
+              }
+
+            case 12:
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 13:
             case "end":
               return _context5.stop();
           }

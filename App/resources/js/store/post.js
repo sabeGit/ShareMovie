@@ -28,7 +28,6 @@ const actions = {
             content: content,
             movie: movie,
         });
-        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data, { root: true });

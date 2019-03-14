@@ -31,7 +31,6 @@ const actions = {
                 username
             }
         });
-        console.log(response.data)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('setUser', response.data);
@@ -47,7 +46,6 @@ const actions = {
                 setUpInfo
             }
         });
-        console.log(response);
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('setUser', response.data);
