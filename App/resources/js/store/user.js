@@ -57,6 +57,7 @@ const actions = {
     },
     async editFavoriteMovie (context, { favorite, movie }) {
         context.commit('setApiStatus', null);
+        context.commit('error/setCode', null, { root: true });
         const response = await axios.post('/api/user/movie/fav',{
             favorite: favorite,
             movie: movie,
@@ -72,6 +73,7 @@ const actions = {
     },
     async editWatchedMovie (context, { watched, movie }) {
         context.commit('setApiStatus', null);
+        context.commit('error/setCode', null, { root: true });
         const response = await axios.post('/api/user/movie/watched',{
             watched: watched,
             movie: movie,
@@ -87,6 +89,7 @@ const actions = {
     },
     async editMovieRating (context, { rating, movie }) {
         context.commit('setApiStatus', null);
+        context.commit('error/setCode', null, { root: true });
         const response = await axios.post('/api/user/movie/rating',{
             rating: rating,
             movie: movie,

@@ -31,13 +31,17 @@ export default {
     watch: {
         errorCode: {
             async handler (val) {
+                console.log(val)
                 if (val === INTERNAL_SERVER_ERROR) {
-                    this.$router.push('/500')
+                    this.$router.push('/500');
                 } else if (val === UNAUTHORIZED) {
                     this.$router.push({ name: 'Login', query: { redirect: this.beforeAuthPagePath }});
                 }
             },
             immediate: true
+        },
+        $route () {
+            this.$store.commit('error/setCode', null)
         }
     }
 }

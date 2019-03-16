@@ -1824,6 +1824,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
+                  console.log(val);
+
                   if (val === _util__WEBPACK_IMPORTED_MODULE_3__["INTERNAL_SERVER_ERROR"]) {
                     this.$router.push('/500');
                   } else if (val === _util__WEBPACK_IMPORTED_MODULE_3__["UNAUTHORIZED"]) {
@@ -1835,7 +1837,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     });
                   }
 
-                case 1:
+                case 2:
                 case "end":
                   return _context.stop();
               }
@@ -1850,6 +1852,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return handler;
       }(),
       immediate: true
+    },
+    $route: function $route() {
+      this.$store.commit('error/setCode', null);
     }
   }
 });
@@ -60209,7 +60214,7 @@ var actions = {
               return _context.abrupt("return", false);
 
             case 11:
-              if (response.status === UNAUTHORIZED) {
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
                 context.commit('auth/setBeforeAuthPagePath', location.pathname, {
                   root: true
                 });
@@ -60410,17 +60415,20 @@ var actions = {
             case 0:
               favorite = _ref.favorite, movie = _ref.movie;
               context.commit('setApiStatus', null);
-              _context3.next = 4;
+              context.commit('error/setCode', null, {
+                root: true
+              });
+              _context3.next = 5;
               return axios.post('/api/user/movie/fav', {
                 favorite: favorite,
                 movie: movie
               });
 
-            case 4:
+            case 5:
               response = _context3.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context3.next = 11;
+                _context3.next = 12;
                 break;
               }
 
@@ -60430,19 +60438,19 @@ var actions = {
               });
               return _context3.abrupt("return", false);
 
-            case 11:
+            case 12:
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
                 context.commit('auth/setBeforeAuthPagePath', location.pathname, {
                   root: true
                 });
               }
 
-            case 12:
+            case 13:
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 13:
+            case 14:
             case "end":
               return _context3.stop();
           }
@@ -60467,17 +60475,20 @@ var actions = {
             case 0:
               watched = _ref2.watched, movie = _ref2.movie;
               context.commit('setApiStatus', null);
-              _context4.next = 4;
+              context.commit('error/setCode', null, {
+                root: true
+              });
+              _context4.next = 5;
               return axios.post('/api/user/movie/watched', {
                 watched: watched,
                 movie: movie
               });
 
-            case 4:
+            case 5:
               response = _context4.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context4.next = 11;
+                _context4.next = 12;
                 break;
               }
 
@@ -60487,19 +60498,19 @@ var actions = {
               });
               return _context4.abrupt("return", false);
 
-            case 11:
+            case 12:
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
                 context.commit('auth/setBeforeAuthPagePath', location.pathname, {
                   root: true
                 });
               }
 
-            case 12:
+            case 13:
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 13:
+            case 14:
             case "end":
               return _context4.stop();
           }
@@ -60524,17 +60535,20 @@ var actions = {
             case 0:
               rating = _ref3.rating, movie = _ref3.movie;
               context.commit('setApiStatus', null);
-              _context5.next = 4;
+              context.commit('error/setCode', null, {
+                root: true
+              });
+              _context5.next = 5;
               return axios.post('/api/user/movie/rating', {
                 rating: rating,
                 movie: movie
               });
 
-            case 4:
+            case 5:
               response = _context5.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context5.next = 11;
+                _context5.next = 12;
                 break;
               }
 
@@ -60544,19 +60558,19 @@ var actions = {
               });
               return _context5.abrupt("return", false);
 
-            case 11:
+            case 12:
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
                 context.commit('auth/setBeforeAuthPagePath', location.pathname, {
                   root: true
                 });
               }
 
-            case 12:
+            case 13:
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 13:
+            case 14:
             case "end":
               return _context5.stop();
           }

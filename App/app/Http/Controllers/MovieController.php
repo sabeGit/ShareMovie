@@ -79,11 +79,10 @@ class MovieController extends Controller
                 $movie->favorite = $movieWithAvgRatingAndUserInfo->users[0]->pivot->favorite;
                 $movie->watched = $movieWithAvgRatingAndUserInfo->users[0]->pivot->watched;
                 $movie->rating = $movieWithAvgRatingAndUserInfo->users[0]->pivot->rating;
-                $movie->posts = $movieWithAvgRatingAndUserInfo->posts;
             }
+            $movie->posts = $movieWithAvgRatingAndUserInfo->posts;
             $movie->avgRating = intval($movieWithAvgRatingAndUserInfo->avgRating);
         }
-        \Debugbar::info($movieWithAvgRatingAndUserInfo);
         return response()->json($movie);
     }
 

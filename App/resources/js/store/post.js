@@ -1,4 +1,4 @@
-import { OK } from '../util'
+import { OK, UNAUTHORIZED } from '../util'
 
 const state = {
     posts: null,
