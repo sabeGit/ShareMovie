@@ -21,13 +21,7 @@ class PostController extends Controller {
     public function create(Request $request) {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         $movie = $this->movieService->getMovieFromDB($request->input('movie'));
-        \Debugbar::info($movie->id);
-        \Debugbar::info($request->input('movie')['id']);
         $post = $this->postService->create($request);
-        return $post;
+        return response()->json($post);
     }
-
-    // public function index(Request $request) {
-    //     return $this->postRepo->getForUser($request->user());
-    // }
 }

@@ -49,8 +49,8 @@ class MovieController extends Controller
                 $movie->avgRating = intval($movieWithAvgRating->avgRating);
             }
         }
-
-        return $movies;
+        \Debugbar::info($movies);
+        return response()->json($movies);
     }
 
     public function getMovieById(Request $request)

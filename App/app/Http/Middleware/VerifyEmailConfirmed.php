@@ -7,7 +7,7 @@ use App\User;
 
 class VerifyEmailConfirmed
 {
-    use \App\Json\AuthJson;
+    use \App\Json\AuthFailJson;
 
     /**
      * Handle an incoming request.
@@ -21,7 +21,7 @@ class VerifyEmailConfirmed
         $user = User::where('email', '=', $request->input('email'))->first();
         if($user){
             if(!$user->email_verified){
-                return response()->json($this->failureLogin(), 400);
+                return response()->json($this->failLogin(), 400);
             }
         }
         return $next($request);
