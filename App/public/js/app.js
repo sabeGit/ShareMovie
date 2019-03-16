@@ -1824,8 +1824,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
-                  console.log(val);
-
                   if (val === _util__WEBPACK_IMPORTED_MODULE_3__["INTERNAL_SERVER_ERROR"]) {
                     this.$router.push('/500');
                   } else if (val === _util__WEBPACK_IMPORTED_MODULE_3__["UNAUTHORIZED"]) {
@@ -1837,7 +1835,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     });
                   }
 
-                case 2:
+                case 1:
                 case "end":
                   return _context.stop();
               }
