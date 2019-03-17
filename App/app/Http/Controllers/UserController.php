@@ -35,7 +35,7 @@ class UserController extends Controller {
     public function getUserByName(Request $request)
     {
         $user = $this->userService->getUserByName($request->input('username'));
-        \Debugbar::info($user);
+        //\Debugbar::info($user);
         return response()->json($user);
     }
 

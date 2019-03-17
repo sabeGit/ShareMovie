@@ -49,7 +49,7 @@ class MovieController extends Controller
                 $movie->avgRating = intval($movieWithAvgRating->avgRating);
             }
         }
-        \Debugbar::info($movies);
+        //\Debugbar::info($movies);
         return response()->json($movies);
     }
 

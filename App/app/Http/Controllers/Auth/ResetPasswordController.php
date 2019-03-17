@@ -40,6 +40,6 @@ class ResetPasswordController extends Controller
 
     public function resetPassword(Request $request)
     {
-        \Debugbar::info($request);
+        //\Debugbar::info($request);
     }
 }
