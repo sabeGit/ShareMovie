@@ -5,6 +5,8 @@
     </div>
 </template>
 <script>
+import { POST_COMMENT } from './../../util';
+
 export default {
     props: {
         movie: {
@@ -20,7 +22,10 @@ export default {
     methods: {
         postContent: async function() {
             if (this.content !== '') {
-                await this.$store.dispatch('post/postContent', { content: this.content, movie: this.movie });
+                const result = await this.$store.dispatch('post/postContent', { content: this.content, movie: this.movie });
+                if (result) {
+                    this.flash(POST_COMMENT, 'success', { timeout: 5000 });
+                }
             }
         },
     }

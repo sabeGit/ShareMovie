@@ -5,6 +5,7 @@
         </header>
         <main>
             <div class="container">
+                <flash-message />
                 <RouterView />
             </div>
         </main>
@@ -12,13 +13,11 @@
 </template>
 <script>
 import Navbar from './components/layouts/Navbar.vue'
-import NoticeMessage from './components/layouts/NoticeMessage.vue'
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from './util';
 
 export default {
     components: {
         Navbar,
-        NoticeMessage
     },
     computed: {
         errorCode () {
@@ -40,9 +39,7 @@ export default {
             immediate: true
         },
         $route () {
-            console.log($route);
             this.$store.commit('error/setCode', null);
-            console.log(errorCode);
         }
     }
 }
