@@ -67,7 +67,8 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data) {
+    protected function create(array $data)
+    {
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -78,7 +79,8 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function resendVerifyMail(Request $request) {
+    public function resendVerifyMail(Request $request)
+    {
         $user = User::where('email', $request->input('email'))->first();
         $this->sendVerifyMail($user);
         return $user;
@@ -89,7 +91,8 @@ class RegisterController extends Controller
         Mail::to($user->email)->send($email);
     }
 
-    public function verify(Request $request) {
+    public function verify(Request $request)
+    {
         $email_token = $request->input('token');
         // 使用可能なトークンか
         if ( !User::where('email_verify_token',$email_token)->exists() ) {
@@ -124,7 +127,8 @@ class RegisterController extends Controller
         }
     }
 
-    protected function registered(Request $request, $user) {
+    protected function registered(Request $request, $user)
+    {
         return $user;
     }
 }
