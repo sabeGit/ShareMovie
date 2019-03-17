@@ -1,0 +1,7 @@
+ECS起動時に必要な設定（すべてapp環境（php-fpm）の設定）
+・「composer install」を実行
+・ソースディレクトリ直下に.envファイルを作成
+・storageディレクトリへの権限を付与
+　# chmod 777 -R storage/
+　⇒権限がないとログが書き込まれない
+・「php artisan migrate」を実行
