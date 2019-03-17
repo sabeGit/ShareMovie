@@ -9,8 +9,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/bootstrap-toggle.min.js') }}" defer></script>
+    <script src="{{ asset('js/app.js', $is_production) }}" defer></script>
+    <script src="{{ asset('js/bootstrap-toggle.min.js', $is_production) }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
