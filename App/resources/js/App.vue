@@ -40,7 +40,9 @@ export default {
             immediate: true
         },
         $route () {
-            this.$store.commit('error/setCode', null)
+            console.log($route);
+            this.$store.commit('error/setCode', null);
+            console.log(errorCode);
         }
     }
 }
