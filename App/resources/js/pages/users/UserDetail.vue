@@ -1,5 +1,5 @@
 <template>
-    <div class="vue-contents">
+    <div class="vue-contents col-md-12">
         <div class="row">
             <div class="col-sm-3 hidden-xs">
                 <div class="profile-img">

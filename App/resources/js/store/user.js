@@ -49,7 +49,7 @@ const actions = {
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('setUser', response.data);
-            return false;
+            return true;
         } else if (response.status === UNAUTHORIZED) {
             context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
@@ -64,7 +64,7 @@ const actions = {
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
-            return false;
+            return true;
         } else if (response.status === UNAUTHORIZED) {
             context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
@@ -79,7 +79,7 @@ const actions = {
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
-            return false;
+            return true;
         } else if (response.status === UNAUTHORIZED) {
             context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }
@@ -94,7 +94,7 @@ const actions = {
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
-            return false;
+            return true;
         } else if (response.status === UNAUTHORIZED) {
             context.commit('auth/setBeforeAuthPagePath', location.pathname, { root: true });
         }

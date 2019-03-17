@@ -8,6 +8,8 @@
     </span>
 </template>
 <script>
+import { UPDATE_RATING } from './../../util';
+
 export default {
     props: {
         movie: {
@@ -33,7 +35,10 @@ export default {
         doRateAction: async function(ratingArg) {
             if (this.isEditable) {
                 this.ratingData = ratingArg;
-                await this.$store.dispatch('user/editMovieRating', { rating: this.ratingData, movie: this.movie });
+                const result = await this.$store.dispatch('user/editMovieRating', { rating: this.ratingData, movie: this.movie });
+                if (result) {
+                    this.flash(UPDATE_RATING, 'success', { timeout: 5000 });
+                }
             }
         },
     }

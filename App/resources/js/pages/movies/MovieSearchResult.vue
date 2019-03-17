@@ -1,5 +1,5 @@
 <template>
-    <div class="vue-contents">
+    <div class="vue-contents col-md-8">
         <SearchMovieList />
     </div>
 </template>

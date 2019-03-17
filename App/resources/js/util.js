@@ -1,10 +1,23 @@
+/**
+ * Httpレスポンスコード
+ */
 export const OK = 200
 export const CREATED = 201
 export const INTERNAL_SERVER_ERROR = 500
 export const UNPROCESSABLE_ENTITY = 422
 export const UNAUTHORIZED = 401
 
-export const LOGIN_ERROR_MSG = '入力されたユーザー名やパスワードが正しくありません。確認してからやりなおしてください。'
+/**
+ * フラッシュメッセージ
+ */
+export const LOGIN_ERROR = '入力されたユーザー名やパスワードが正しくありません。確認してからやりなおしてください。'
+export const AUTH_ERROR = 'ログインしてください'
+export const ADD_FAVORITE = 'お気に入りに登録しました';
+export const REMOVE_FAVORITE = 'お気に入りを解除しました';
+export const ADD_WATCHED = '視聴済みに登録しました';
+export const REMOVE_WATCHED = '視聴済みを解除しました';
+export const POST_COMMENT = 'コメントを投稿しました';
+export const UPDATE_RATING = '評価を更新しました';
 
 /**
  * クッキーの値を取得する

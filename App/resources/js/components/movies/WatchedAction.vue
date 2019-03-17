@@ -5,6 +5,8 @@
     </div>
 </template>
 <script>
+import { ADD_WATCHED, REMOVE_WATCHED } from './../../util';
+
 export default {
     props: {
         movie: {
@@ -24,7 +26,12 @@ export default {
     methods: {
         doWatchedAction: async function() {
             this.watchedData = !this.watchedData;
-            await this.$store.dispatch('user/editWatchedMovie', { watched: this.watchedData, movie: this.movie });
+            const result = await this.$store.dispatch('user/editWatchedMovie', { watched: this.watchedData, movie: this.movie });
+            if (result && this.watchedData) {
+                this.flash(ADD_WATCHED, 'success', { timeout: 5000 });
+            } else if (result && !this.watchedData) {
+                this.flash(REMOVE_WATCHED, 'info', { timeout: 5000 });
+            }
         },
     }
 }

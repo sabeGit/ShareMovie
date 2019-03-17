@@ -1,5 +1,5 @@
 <template>
-    <div class="movie-list col-md-8">
+    <div class="movie-list">
         <div v-for="movie in movieList" class="movie-item">
             <div class="poster">
                 <img class="poster-img" v-bind:src="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" alt="Sample">

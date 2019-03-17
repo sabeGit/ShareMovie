@@ -46,6 +46,15 @@ a.list-group-item {
 }
 .vue-contents {
     margin: auto;
+    top: 30px;
+}
+.flash__wrapper {
+    position: absolute;
+    width: 60%;
+    margin: auto;
+    z-index: 999;
+    right: 0;
+    left: 0;
 }
 
 /*
@@ -129,6 +138,13 @@ a.list-group-item {
 }
 
 /*
+* ログインページ
+*/
+.card.login {
+    width: 100%;
+}
+
+/*
 * movies.indexページ（映画一覧画面）
 */
 .card-img-top.img-index {
@@ -164,7 +180,6 @@ a.list-group-item {
 .movie-detail-area {
     float: left;
     width: 70%;
-    margin-top: 20px;
 }
 .card-img-top.img-show {
     float: left;
@@ -177,7 +192,6 @@ a.list-group-item {
     display: inline-block;
     border: initial;
     width: auto;
-    margin-top: 20px;
     margin-right: 20px;
 }
 .movie-title.movie-detail {
