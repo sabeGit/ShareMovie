@@ -136,7 +136,7 @@ class MovieService
 
     public function createMovieAndStaff($targetMovie)
     {
-        \Debugbar::info($targetMovie);
+        //\Debugbar::info($targetMovie);
         $creditArray = $this->helperService->getCredits($targetMovie, 3);  // クレジット情報を取得
         $targetStaff = $this->staffService->create($creditArray);          // クレジット情報をもとにstaffレコード作成
         $movie = $this->create($targetMovie);                // 映画情報をもとにmovieレコード作成
