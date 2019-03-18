@@ -2737,6 +2737,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../util */ "./resources/js/util.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2782,6 +2783,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2820,11 +2822,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return this.$store.dispatch('auth/login', this.loginForm);
 
               case 2:
-                console.log(this.loginedPushPath);
-                console.log(this.apiStatus);
-                console.log(this.loginUser);
-                console.log(this.loginUser['name']);
-
                 if (this.apiStatus) {
                   if (this.loginedPushPath != null) {
                     this.$router.push(this.loginedPushPath);
@@ -2837,9 +2834,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       }
                     });
                   }
+                } else {
+                  this.flash(_util__WEBPACK_IMPORTED_MODULE_1__["LOGIN_ERROR"], 'error', {
+                    timeout: 5000
+                  });
                 }
 
-              case 7:
+              case 3:
               case "end":
                 return _context.stop();
             }
