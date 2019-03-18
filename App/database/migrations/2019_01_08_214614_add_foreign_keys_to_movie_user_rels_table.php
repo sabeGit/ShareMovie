@@ -14,8 +14,8 @@ class AddForeignKeysToMovieUserRelsTable extends Migration {
 	{
 		Schema::table('movie_user_rels', function(Blueprint $table)
 		{
-			$table->foreign('movie_id')->references('id')->on('movies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-			$table->foreign('user_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			$table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
 	}
 
