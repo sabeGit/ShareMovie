@@ -38,6 +38,8 @@
     </div>
 </template>
 <script>
+import { LOGIN_ERROR } from './../../util';
+
 export default {
     data() {
         return {
@@ -67,16 +69,14 @@ export default {
         login: async function () {
             // authストアのloginアクションを呼び出す
             await this.$store.dispatch('auth/login', this.loginForm);
-            console.log(this.loginedPushPath)
-            console.log(this.apiStatus)
-            console.log(this.loginUser)
-            console.log(this.loginUser['name'])
             if (this.apiStatus) {
                 if (this.loginedPushPath != null) {
                     this.$router.push(this.loginedPushPath);
                 } else {
                     this.$router.push({ name: 'UserDetail', params: { username: this.loginUser['name'], option: 'post' }});
                 }
+            } else {
+                this.flash(LOGIN_ERROR, 'error', { timeout: 5000 });
             }
         }
     }
