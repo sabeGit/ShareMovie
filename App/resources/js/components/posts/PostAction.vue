@@ -24,6 +24,7 @@ export default {
             if (this.content !== '') {
                 const result = await this.$store.dispatch('post/postContent', { content: this.content, movie: this.movie });
                 if (result) {
+                    this.content = '';
                     this.flash(POST_COMMENT, 'success', { timeout: 5000 });
                 }
             }

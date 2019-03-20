@@ -9,14 +9,14 @@ trait UserFailJson
     private function failFileExtensionException() : array
     {
         return [
-            'message' => 'file extension not applicable'
+            'messages' => 'file extension not applicable'
         ];
     }
 
     private function failS3Upload() : array
     {
         return [
-            'message' => 'fail S3 upload'
+            'messages' => 'fail S3 upload'
         ];
     }
 }

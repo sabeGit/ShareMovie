@@ -14,3 +14,4 @@ yarn-error.log
 .env
 .phpunit.result.cache
 ./../開発メモ.txt
+.env.testing
