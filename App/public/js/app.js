@@ -2504,6 +2504,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 result = _context.sent;
 
                 if (result) {
+                  this.content = '';
                   this.flash(_util__WEBPACK_IMPORTED_MODULE_1__["POST_COMMENT"], 'success', {
                     timeout: 5000
                   });

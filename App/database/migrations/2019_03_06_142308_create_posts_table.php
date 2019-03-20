@@ -23,7 +23,7 @@ class CreatePostsTable extends Migration
             $table->integer('movie_id')->unsigned()->nullable();
             $table->foreign('movie_id')
                   ->references('id')->on('movies');
-			$table->text('content', 65535)->nullable(false);
+			$table->string('content', 560)->nullable(false);
 			$table->timestamps();
 		});
     }

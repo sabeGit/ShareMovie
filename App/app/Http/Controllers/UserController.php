@@ -39,32 +39,11 @@ class UserController extends Controller {
         return response()->json($user);
     }
 
-    // public function getMovieUserRelByMovieId(Request $request)
-    // {
-    //     $movieList = $this->movieService->getAttachedMoviesById($request->user(), $request->input('movie_id'));
-    //     $movieListInfo = $this->movieService->getMovieUserRelInfo($movieList);
-    //     return $movieListInfo;
-    // }
-
     public function getAllAttachedMovies(Request $request)
     {
         $movies = $this->getMoviesWithAvgRatingByUsername($request->input('username'));
         return response()->json($movie);
     }
-
-    // public function getFavMovies(Request $request)
-    // {
-    //     $user = $this->userService->getByName($request->input('username'));
-    //     $movieList = $this->movieService->getFavMovies($user);
-    //     return $movieList;
-    // }
-    //
-    // public function getWatchedMovies(Request $request)
-    // {
-    //     $user = $this->userService->getByName($request->input('username'));
-    //     $movieList = $this->movieService->getWatchedMovies($user);
-    //     return $movieList;
-    // }
 
     public function editFavoriteMovie(Request $request)
     {

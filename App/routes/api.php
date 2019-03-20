@@ -50,7 +50,7 @@ Route::get('/user/movie/watched', 'UserController@getWatchedMovies');
 
 Route::group(['middleware' => 'auth:api'], function() {
     // コメントを投稿
-    Route::post('posts', 'PostController@create');
+    Route::post('posts', 'PostController@create')->name('createPost');
     // お気に入り映画リストを編集
     Route::post('/user/movie/fav', 'UserController@editFavoriteMovie');
     // 視聴済み映画リストを編集
