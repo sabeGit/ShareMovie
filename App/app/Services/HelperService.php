@@ -15,8 +15,8 @@ class HelperService
      */
      public function getCredits($movie, $num)
      {
-         $directorArray = array();                 // 監督格納用array
-         $castArray     = array();                 // キャスト格納用array
+         $directorArray = array();                     // 監督格納用array
+         $castArray     = array();                     // キャスト格納用array
          $casts         = $movie['credits']['cast'];   // 映画情報からキャスト情報を取得
          $crews         = $movie['credits']['crew'];   // 映画情報からスタッフ情報を取得
          $top3 = range(0, $num);
@@ -107,61 +107,4 @@ class HelperService
          }
          return $extension;
      }
-    // public function uploadFileToS3($fileBase64, $path = '') {
-    //     $allowExt = ['jpeg', 'jpg', 'png'];
-    //     $decodedFile = $this->decodeProfileImage($fileBase64);
-    //     $fileExt = $this->getExtFromFileBase64($fileBase64);
-    //     if (array_search($fileExt, $allowExt)) {
-    //         $fileName = str_random(40).'.'.$fileExt;
-    //         $result = Storage::disk('s3')->put('/'.$path.'/'.$fileName, $decodedFile, 'public');
-    //         if ($result) {
-    //             $url = Storage::disk('s3')->url($path.'/'.$fileName);
-    //             return response()->json(
-    //                 [
-    //                     'message' => 'アップロードに成功しました。',
-    //                     'url' => $url
-    //                 ],
-    //                 200,
-    //                 ['Content-Type' => 'application/json'],
-    //                 JSON_UNESCAPED_UNICODE
-    //             );
-    //         } else {
-    //             return response()->json(
-    //                 [
-    //                     'code' => 01,
-    //                     'message' => 'S3にアップロードできませんでした。'
-    //                 ],
-    //                 500,
-    //                 ['Content-Type' => 'application/json'],
-    //                 JSON_UNESCAPED_UNICODE
-    //             );
-    //         }
-    //     } else {
-    //         return response()->json(
-    //             [
-    //                 'code' => 02,
-    //                 'message' => '不正な拡張子です。'
-    //             ],
-    //             400,
-    //             ['Content-Type' => 'application/json'],
-    //             JSON_UNESCAPED_UNICODE
-    //         );
-    //     }
-    // }
-    //
-    //  public function decodeProfileImage($fileBase64) {
-    //      list(, $fileData) = explode(';', $fileBase64);
-    //      list(, $fileData) = explode(',', $fileData);
-    //      $decodedFile = base64_decode($fileData);
-    //      return $decodedFile;
-    //  }
-    //
-    //  public function getExtFromFileBase64($fileBase64) {
-    //      list($prefix,) = explode(';', $fileBase64);
-    //      $fileExt = substr($prefix, strpos($fileBase64, '/') + 1);
-    //      if ($fileExt == 'jpeg') {
-    //          $fileExt = 'jpg';
-    //      }
-    //      return $fileExt;
-    //  }
 }

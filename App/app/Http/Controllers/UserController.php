@@ -35,7 +35,6 @@ class UserController extends Controller {
     public function getUserByName(Request $request)
     {
         $user = $this->userService->getUserByName($request->input('username'));
-        //\Debugbar::info($user);
         return response()->json($user);
     }
 
@@ -48,7 +47,7 @@ class UserController extends Controller {
     public function editFavoriteMovie(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
-        $movie = $this->movieService->getMovieFromDB($request->input('movie'));
+        $movie = $this->movieService->getMovieFromDB($request->movie);
         // お気に入り映画リストを編集
         $this->userService->editFavoriteMovie($request->user(), $request->favorite, $movie->id);
         $user = $this->userService->getUserByName($request->user()->name);
@@ -58,7 +57,7 @@ class UserController extends Controller {
     public function editWatchedMovie(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
-        $movie = $this->movieService->getMovieFromDB($request->input('movie'));
+        $movie = $this->movieService->getMovieFromDB($request->movie);
         // 視聴済み映画リストを編集
         $this->userService->editWatchedMovie($request->user(), $request->watched, $movie->id);
         $user = $this->userService->getUserByName($request->user()->name);
@@ -68,10 +67,11 @@ class UserController extends Controller {
     public function editMovieRating(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
-        $movie = $this->movieService->getMovieFromDB($request->input('movie'));
+        $movie = $this->movieService->getMovieFromDB($request->movie);
         // 視聴済み映画リストを編集
         $this->userService->editMovieRating($request->user(), $request->rating, $movie->id);
         $user = $this->userService->getUserByName($request->user()->name);
+        //\Debugbar::info($user);
         return response()->json($user);
     }
 

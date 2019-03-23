@@ -15,8 +15,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Movie::class, function (Faker $faker) {
     return [
-        'name' => 1,
-        'title' => 'test_movie',
+        'id' => 550,
+        'title' => 'ファイト・クラブ',
         'poster_path' => '',
         'overview' => 'test',
     ];

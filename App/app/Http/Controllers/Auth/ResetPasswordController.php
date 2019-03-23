@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Http\Request;
+use App\Http\Requests\ResetPasswordRequest;
 
 class ResetPasswordController extends Controller
 {
@@ -18,8 +18,6 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-
-    use ResetsPasswords;
 
     /**
      * Where to redirect users after resetting their password.
@@ -38,8 +36,22 @@ class ResetPasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        //\Debugbar::info($request);
+        $email_token = $request->token;
+        // 使用可能なトークンか
+        if ( !User::where('email_verify_token',$email_token)->exists() ) {
+            return array(
+                'result'  => 'error',
+                'message' => '無効なトークンです。',
+                'user'    => null,
+            );
+        } else {
+            $user = User::where('email_verify_token', $email_token)->first();
+            $user->forceFill([
+                'password' => bcrypt($request->password),
+            ])->save();
+            return response()->json($user, 200);
+        }
     }
 }

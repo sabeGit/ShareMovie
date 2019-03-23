@@ -28,11 +28,9 @@ const getters = {
         return state.movies ? state.movies.filter(movie => movie.pivot.watched) :null
     },
     watchedMoviesCount: state => {
-        //return state.movies ? state.movies.filter(movie => movie.users[0].pivot.watched).length : 0
         return state.movies ? state.movies.filter(movie => movie.pivot.watched).length : 0
     },
     favMoviesCount: state => {
-        // return state.movies ? state.movies.filter(movie => movie.users[0].pivot.favorite).length : 0
         return state.movies ? state.movies.filter(movie => movie.pivot.favorite).length : 0
     },
 }
@@ -71,7 +69,7 @@ const actions = {
                 userId: userId
             }
         });
-        console.log(response.data)
+        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('post/setPosts', response.data.posts, { root: true });

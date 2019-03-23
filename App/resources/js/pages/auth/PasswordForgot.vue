@@ -17,7 +17,7 @@
                             </div>
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary" v-bind:disabled="isPush">
                                         送信
                                     </button>
                                 </div>
@@ -34,10 +34,12 @@ export default {
     data() {
         return {
             email: '',
+            isPush: false,
         }
     },
     methods: {
         sendPasswordResetMail: async function () {
+            this.isPush = true;
             await this.$store.dispatch('auth/sendPasswordResetMail', this.email);
             this.$router.push('/password/sent');
         }
