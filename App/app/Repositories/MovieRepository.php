@@ -29,7 +29,7 @@ class MovieRepository implements MovieRepositoryInterface {
      */
     public function create($movie) {
         $movie = Movie::updateOrCreate(
-            ['id' => $movie['id']],
+            ['id'          => $movie['id']],
             ['title'       => $movie['title'],
              'poster_path' => $movie['poster_path'],
              'overview'    => $movie['overview']]
@@ -59,7 +59,7 @@ class MovieRepository implements MovieRepositoryInterface {
     }
 
     /**
-     * 映画の平均評価を取得（ユーザー情報付き）
+     * 平均評価付き映画情報を取得（複数）
      *
      * @param array|$movieIds|映画id
      * @return Movie|平均評価付き映画
@@ -69,7 +69,8 @@ class MovieRepository implements MovieRepositoryInterface {
             'users' => function($query) use($user_id) {
                 $query->where('id', $user_id);
             },
-            'staffs'])->whereIn('id', $movieIds)->get();
+            'staffs'
+        ])->whereIn('id', $movieIds)->get();
     }
 
     /**
@@ -83,7 +84,7 @@ class MovieRepository implements MovieRepositoryInterface {
     }
 
     /**
-     * 映画の平均評価を取得（ユーザー情報付き）
+     * 平均評価付き映画情報を取得（単数）
      *
      * @param int|$movie_id|映画id
      * @return Movie|平均評価付き映画
@@ -99,28 +100,6 @@ class MovieRepository implements MovieRepositoryInterface {
             'posts.movie'
         ])->where('id', $movie_id)->first();
     }
-
-    // /**
-    //  * 映画の平均評価を取得
-    //  *
-    //  * @param int|$movie_id|映画id
-    //  * @return Movie|$movie
-    //  */
-    // public function getMoviesWithAvgRatingById($movie_id) {
-    //     // return $movie = Movie::with('avgRating')->where('id', $movie_id)->get();
-    //     // return $movie = Movie::with('users')->where('id', $movie_id)->first();
-    //     return Movie::all();
-    // }
-
-    // /**
-    //  * 映画の平均評価とユーザー情報を取得
-    //  *
-    //  * @param Model|$movie|映画
-    //  * @return int|平均評価
-    //  */
-    // public function getMoviesWithAvgRatingWithUser($movie) {
-    //     return $movie = Movie::with('movieWithAvgRatingAndUsers')->whereIn('id', $movie)->get();
-    // }
 
     /**
      * userとmovieの紐づき情報を取得（単数）

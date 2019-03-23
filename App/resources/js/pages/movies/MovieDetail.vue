@@ -88,7 +88,10 @@ export default {
     },
     methods: {
         getMovieDetail: async function() {
-            this.movie = await this.$store.dispatch('movie/getMovieById', { movieId: this.$route.params.id, userId: this.loginUser ? this.loginUser.id : null });
+            this.movie = await this.$store.dispatch('movie/getMovieById', {
+                movieId: this.$route.params.id,
+                userId: this.loginUser ? this.loginUser.id : null,
+            });
         },
     }
 }

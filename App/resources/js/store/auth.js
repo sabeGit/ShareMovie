@@ -67,6 +67,7 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true });
         }
     },
+
     // ユーザー本登録
     async verify (context, token) {
         context.commit('setApiStatus', null);
@@ -90,6 +91,7 @@ const actions = {
         }
         return false;
     },
+
     // ログイン
     async login (context, data) {
         context.commit('setApiStatus', null);
@@ -104,6 +106,7 @@ const actions = {
         }
         context.commit('setApiStatus', false);
     },
+
     // ログアウト
     async logout (context) {
         context.commit('setApiStatus', null);
@@ -118,6 +121,7 @@ const actions = {
         context.commit('setApiStatus', false);
         context.commit('error/setCode', response.status, { root: true });
     },
+
     // ログインユーザチェック
     async currentUser (context) {
         context.commit('setApiStatus', null);
@@ -132,6 +136,8 @@ const actions = {
         context.commit('setApiStatus', false);
         context.commit('error/setCode', response.status, { root: true });
     },
+
+    // 確認メール再送
     async resendVerifyMail (context, email) {
         context.commit('setApiStatus', null);
         const response = await axios.get('/api/register/verify/resend', {
@@ -150,6 +156,8 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true });
         }
     },
+    
+    // パスワードリセットメール送信
     async sendPasswordResetMail (context, email) {
         context.commit('setApiStatus', null);
         const response = await axios.get('/api/password', {
@@ -168,33 +176,14 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true });
         }
     },
-    async verifyPasswordResetMail (context, token) {
+
+    // パスワードのリセット
+    async resetPassword (context, { data, token }) {
         context.commit('setApiStatus', null);
-        const response = await axios.get('/api/password/verify', {
-            params: {
-                token
-            }
-        });
-        if (response.status === OK) {
-            context.commit('setUser', response.data.user);
-            context.commit('setApiStatus', true);
-            return false;
-        }
-        context.commit('setApiStatus', false);
-        if (response.status === UNPROCESSABLE_ENTITY) {
-            context.commit('setLoginErrorMessages', response.data.errors);
-        } else {
-            context.commit('error/setCode', response.status, { root: true });
-        }
-    },
-    async resetPassword (context, data) {
-        context.commit('setApiStatus', null);
-        console.log(data);
         const response = await axios.post('/api/password/reset', {
-            params: {
-                new_password : data,
-                user : context.state.user,
-            }
+            token                : token,
+            password             : data.password,
+            password_confirmation: data.password_confirmation,
         });
         if (response.status === OK) {
             context.commit('setApiStatus', true);

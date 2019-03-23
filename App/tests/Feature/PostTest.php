@@ -21,18 +21,19 @@ class PostTest extends TestCase
 
     public function testSuccessPostComment()
     {
-        $request = [
-                        'content' => 'test_comment',
-                        'movie' => Array(
-                            'id' => 1,
-                            'title' => 'test_title',
-                            'overview' => 'test_overview',
-                            'poster_path' => '',
-                        ),
-                    ];
+        $request['content'] = 'test_comment';
+        $request['movie']   = array(
+                                  'id' => 1,
+                                  'title' => 'test_title',
+                                  'overview' => 'test_overview',
+                                  'poster_path' => '',
+                                  'credits' => [
+                                      'cast' => [],
+                                      'crew' => [],
+                                  ],
+                              );
         $response = $this->actingAs($this->user, 'api')
                          ->json('POST', route('createPost'), $request);
-
         $response->assertStatus(200);
     }
 

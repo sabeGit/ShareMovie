@@ -42,23 +42,4 @@ class ForgotPasswordController extends Controller
 
         return $user;
     }
-
-    public function verifyPasswordResetMail(Request $request) {
-        $email_token = $request->input('token');
-        // 使用可能なトークンか
-        if ( !User::where('email_verify_token',$email_token)->exists() ) {
-            return array(
-                'result'  => 'error',
-                'message' => '無効なトークンです。',
-                'user'    => null,
-            );
-        } else {
-            $user = User::where('email_verify_token', $email_token)->first();
-            return array(
-                'result'  => 'success',
-                'message' => '有効なトークンです。',
-                'user'    => $user,
-            );
-        }
-    }
 }

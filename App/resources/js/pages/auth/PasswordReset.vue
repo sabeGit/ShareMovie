@@ -34,6 +34,8 @@
     </div>
 </template>
 <script>
+import { POST_COMMENT } from './../../util';
+
 export default {
     data () {
         return {
@@ -44,16 +46,13 @@ export default {
             isPush: false,
         }
     },
-    created () {
-        this.verifyPasswordResetMail();
-    },
     methods: {
-        verifyPasswordResetMail: async function () {
-            await this.$store.dispatch('auth/verifyPasswordResetMail', this.$route.params.token);
-        },
         resetPassword: async function () {
             this.isPush = true;
-            await this.$store.dispatch('auth/resetPassword', this.resetPasswordForm);
+            await this.$store.dispatch('auth/resetPassword', {
+                data: this.resetPasswordForm,
+                token: this.$route.params.token,
+            });
         }
     }
 }

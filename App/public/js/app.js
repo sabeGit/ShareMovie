@@ -2476,7 +2476,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      content: ''
+      content: '',
+      isPush: false
     };
   },
   methods: {
@@ -2489,18 +2490,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                this.isPush = true;
+
                 if (!(this.content !== '')) {
-                  _context.next = 5;
+                  _context.next = 6;
                   break;
                 }
 
-                _context.next = 3;
+                _context.next = 4;
                 return this.$store.dispatch('post/postContent', {
                   content: this.content,
                   movie: this.movie
                 });
 
-              case 3:
+              case 4:
                 result = _context.sent;
 
                 if (result) {
@@ -2510,7 +2513,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-              case 5:
+              case 6:
+                this.isPush = false;
+
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -2911,7 +2917,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      email: ''
+      email: '',
+      isPush: false
     };
   },
   methods: {
@@ -2923,13 +2930,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                this.isPush = true;
+                _context.next = 3;
                 return this.$store.dispatch('auth/sendPasswordResetMail', this.email);
 
-              case 2:
+              case 3:
                 this.$router.push('/password/sent');
 
-              case 3:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -2959,6 +2967,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../util */ "./resources/js/util.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3000,6 +3009,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3010,53 +3020,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isPush: false
     };
   },
-  created: function created() {
-    this.verifyPasswordResetMail();
-  },
   methods: {
-    verifyPasswordResetMail: function () {
-      var _verifyPasswordResetMail = _asyncToGenerator(
+    resetPassword: function () {
+      var _resetPassword = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return this.$store.dispatch('auth/verifyPasswordResetMail', this.$route.params.token);
+                this.isPush = true;
+                _context.next = 3;
+                return this.$store.dispatch('auth/resetPassword', {
+                  data: this.resetPasswordForm,
+                  token: this.$route.params.token
+                });
 
-              case 2:
+              case 3:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee, this);
-      }));
-
-      function verifyPasswordResetMail() {
-        return _verifyPasswordResetMail.apply(this, arguments);
-      }
-
-      return verifyPasswordResetMail;
-    }(),
-    resetPassword: function () {
-      var _resetPassword = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                this.isPush = true;
-                _context2.next = 3;
-                return this.$store.dispatch('auth/resetPassword', this.resetPasswordForm);
-
-              case 3:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
       }));
 
       function resetPassword() {
@@ -40944,7 +40929,7 @@ var render = function() {
       "button",
       {
         staticClass: "btn btn-primary post",
-        attrs: { type: "submit" },
+        attrs: { type: "submit", disabled: _vm.isPush },
         on: {
           click: function($event) {
             _vm.postContent()
@@ -41611,7 +41596,22 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(0)
+                _c("div", { staticClass: "form-group row mb-0" }, [
+                  _c("div", { staticClass: "col-md-8 offset-md-4" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit", disabled: _vm.isPush }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                    送信\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                ])
               ]
             )
           ])
@@ -41620,26 +41620,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row mb-0" }, [
-      _c("div", { staticClass: "col-md-8 offset-md-4" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [
-            _vm._v(
-              "\n                                    送信\n                                "
-            )
-          ]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -60127,6 +60108,7 @@ var actions = {
 
     return currentUser;
   }(),
+  // 確認メール再送
   resendVerifyMail: function () {
     var _resendVerifyMail = _asyncToGenerator(
     /*#__PURE__*/
@@ -60180,6 +60162,7 @@ var actions = {
 
     return resendVerifyMail;
   }(),
+  // パスワードリセットメール送信
   sendPasswordResetMail: function () {
     var _sendPasswordResetMail = _asyncToGenerator(
     /*#__PURE__*/
@@ -60233,24 +60216,26 @@ var actions = {
 
     return sendPasswordResetMail;
   }(),
-  verifyPasswordResetMail: function () {
-    var _verifyPasswordResetMail = _asyncToGenerator(
+  // パスワードのリセット
+  resetPassword: function () {
+    var _resetPassword = _asyncToGenerator(
     /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(context, token) {
-      var response;
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(context, _ref) {
+      var data, token, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
+              data = _ref.data, token = _ref.token;
               context.commit('setApiStatus', null);
-              _context8.next = 3;
-              return axios.get('/api/password/verify', {
-                params: {
-                  token: token
-                }
+              _context8.next = 4;
+              return axios.post('/api/password/reset', {
+                token: token,
+                password: data.password,
+                password_confirmation: data.password_confirmation
               });
 
-            case 3:
+            case 4:
               response = _context8.sent;
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
@@ -60258,7 +60243,6 @@ var actions = {
                 break;
               }
 
-              context.commit('setUser', response.data.user);
               context.commit('setApiStatus', true);
               return _context8.abrupt("return", false);
 
@@ -60281,62 +60265,7 @@ var actions = {
       }, _callee8, this);
     }));
 
-    function verifyPasswordResetMail(_x13, _x14) {
-      return _verifyPasswordResetMail.apply(this, arguments);
-    }
-
-    return verifyPasswordResetMail;
-  }(),
-  resetPassword: function () {
-    var _resetPassword = _asyncToGenerator(
-    /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(context, data) {
-      var response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
-        while (1) {
-          switch (_context9.prev = _context9.next) {
-            case 0:
-              context.commit('setApiStatus', null);
-              console.log(data);
-              _context9.next = 4;
-              return axios.post('/api/password/reset', {
-                params: {
-                  new_password: data,
-                  user: context.state.user
-                }
-              });
-
-            case 4:
-              response = _context9.sent;
-
-              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context9.next = 8;
-                break;
-              }
-
-              context.commit('setApiStatus', true);
-              return _context9.abrupt("return", false);
-
-            case 8:
-              context.commit('setApiStatus', false);
-
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
-
-            case 10:
-            case "end":
-              return _context9.stop();
-          }
-        }
-      }, _callee9, this);
-    }));
-
-    function resetPassword(_x15, _x16) {
+    function resetPassword(_x13, _x14) {
       return _resetPassword.apply(this, arguments);
     }
 
@@ -60478,13 +60407,11 @@ var getters = {
     }) : null;
   },
   watchedMoviesCount: function watchedMoviesCount(state) {
-    //return state.movies ? state.movies.filter(movie => movie.users[0].pivot.watched).length : 0
     return state.movies ? state.movies.filter(function (movie) {
       return movie.pivot.watched;
     }).length : 0;
   },
   favMoviesCount: function favMoviesCount(state) {
-    // return state.movies ? state.movies.filter(movie => movie.users[0].pivot.favorite).length : 0
     return state.movies ? state.movies.filter(function (movie) {
       return movie.pivot.favorite;
     }).length : 0;
@@ -60538,7 +60465,7 @@ var actions = {
 
             case 5:
               response = _context.sent;
-              console.log(response.data);
+              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
                 _context.next = 11;
@@ -60746,26 +60673,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var state = {
-  posts: null,
+  posts: [],
   apiStatus: null
 };
 var getters = {
+  // postsを受渡
   posts: function posts(state) {
     return state.posts;
   },
+  // postsの数を受渡
   postsCount: function postsCount(state) {
     return state.posts ? state.posts.length : 0;
   }
 };
 var mutations = {
+  // 取得したpostを配列に保管
   setPosts: function setPosts(state, posts) {
     state.posts = posts;
   },
+  // 最新のpostを追加
+  addPost: function addPost(state, post) {
+    state.posts.unshift(post);
+  },
+  // APIコール結果を保管
   setApiStatus: function setApiStatus(state, status) {
     state.apiStatus = status;
   }
 };
 var actions = {
+  // postを作成
   postContent: function () {
     var _postContent = _asyncToGenerator(
     /*#__PURE__*/
@@ -60792,7 +60728,7 @@ var actions = {
               }
 
               context.commit('setApiStatus', true);
-              context.commit('movie/setMovies', response.data, {
+              context.commit('post/addPost', response.data.posts, {
                 root: true
               });
               return _context.abrupt("return", true);
@@ -61121,9 +61057,10 @@ var actions = {
 
             case 4:
               response = _context5.sent;
+              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context5.next = 11;
+                _context5.next = 12;
                 break;
               }
 
@@ -61133,19 +61070,19 @@ var actions = {
               });
               return _context5.abrupt("return", true);
 
-            case 11:
+            case 12:
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNAUTHORIZED"]) {
                 context.commit('auth/setBeforeAuthPagePath', location.pathname, {
                   root: true
                 });
               }
 
-            case 12:
+            case 13:
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 13:
+            case 14:
             case "end":
               return _context5.stop();
           }

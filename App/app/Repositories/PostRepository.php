@@ -19,15 +19,10 @@ class PostRepository implements PostRepositoryInterface {
      */
     public function create($request) {
         $post = new Post();
-        $post->content = $request->input('content');
+        $post->content = $request->content;
         $post->user_id = $request->user()->id;
-        $post->movie_id = $request->input('movie')['id'];
+        $post->movie_id = $request->movie['id'];
         $post->save();
         return $post;
-        // $post->content = $request->input('content')
-        // $request->user()->posts()->create([
-        //     'content'    => $request->input('content'),
-        //     'movie_id'   => 550,
-        // ]);
     }
 }

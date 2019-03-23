@@ -91,6 +91,7 @@ const actions = {
             rating: rating,
             movie: movie,
         });
+        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('movie/setMovies', response.data.movies, { root: true });
