@@ -13,8 +13,11 @@ class MovieService
     protected $movieRepo;
     protected $helperService, $staffService;
 
-    public function __construct(MovieRepositoryInterface $movieRepo, HelperService $helperService, StaffService $staffService)
-    {
+    public function __construct(
+        MovieRepositoryInterface $movieRepo,
+        HelperService $helperService,
+        StaffService $staffService
+    ) {
         $this->movieRepo = $movieRepo;
         $this->helperService = $helperService;
         $this->staffService = $staffService;
