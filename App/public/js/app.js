@@ -41343,63 +41343,6 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.loginForm.remember,
-                      expression: "loginForm.remember"
-                    }
-                  ],
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", name: "remember", id: "remember" },
-                  domProps: {
-                    checked: Array.isArray(_vm.loginForm.remember)
-                      ? _vm._i(_vm.loginForm.remember, null) > -1
-                      : _vm.loginForm.remember
-                  },
-                  on: {
-                    change: function($event) {
-                      var $$a = _vm.loginForm.remember,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 &&
-                            _vm.$set(
-                              _vm.loginForm,
-                              "remember",
-                              $$a.concat([$$v])
-                            )
-                        } else {
-                          $$i > -1 &&
-                            _vm.$set(
-                              _vm.loginForm,
-                              "remember",
-                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                            )
-                        }
-                      } else {
-                        _vm.$set(_vm.loginForm, "remember", $$c)
-                      }
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "remember" }
-                  },
-                  [_vm._v("ログイン情報を保存する")]
-                )
-              ]),
-              _vm._v(" "),
               _c("div", { staticClass: "form-group row mb-0" }, [
                 _c(
                   "div",
@@ -42357,7 +42300,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(_vm.actors, function(actor) {
                     return _c("dd", [
-                      _c("a", { attrs: { href: "#" } }, [
+                      _c("span", { staticStyle: { "font-weight": "bold" } }, [
                         _vm._v(_vm._s(actor.name))
                       ]),
                       _vm._v(" "),
@@ -42371,7 +42314,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(_vm.crews, function(crew) {
                     return _c("dd", [
-                      _c("a", { attrs: { href: "#" } }, [
+                      _c("span", { staticStyle: { "font-weight": "bold" } }, [
                         _vm._v(_vm._s(crew.name))
                       ]),
                       _vm._v(" "),

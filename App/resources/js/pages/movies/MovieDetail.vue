@@ -17,12 +17,12 @@
                 <dl>
                     <dt>主演</dt>
                         <dd v-for="actor in actors">
-                            <a href="#">{{ actor.name }}</a>
+                            <span style="font-weight: bold;">{{ actor.name }}</span>
                                 <span v-if="actor !== actors.slice(-1)[0]">,</span>
                         </dd>
                     <dt>監督</dt>
                         <dd v-for="crew in crews">
-                            <a href="#">{{ crew.name }}</a>
+                            <span style="font-weight: bold;">{{ crew.name }}</span>
                                 <span v-if="crew !== crews.slice(-1)[0]">,</span>
                         </dd>
                 </dl>
