@@ -9,14 +9,14 @@ trait UserFailJson
     private function failFileExtensionException() : array
     {
         return [
-            'messages' => 'file extension not applicable'
+            'messages' => 'ファイルの拡張子が不適切です'
         ];
     }
 
     private function failS3Upload() : array
     {
         return [
-            'messages' => 'fail S3 upload'
+            'messages' => 'ファイルのアップロードに失敗しました'
         ];
     }
 }

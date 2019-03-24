@@ -12,10 +12,10 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <RouterLink class="dropdown-item" v-bind:to="{ name : 'UserDetail', params : { username: username, option: 'post' }}">
+                            <RouterLink v-bind:to="{ name : 'UserDetail', params : { username: username, option: 'post' }}" class="dropdown-item">
                                 マイページ
                             </RouterLink>
-                            <RouterLink class="dropdown-item" v-bind:to="{ name : 'UserSetUpAccount'}">
+                            <RouterLink v-bind:to="{ name: 'UserSetting', params: { option: 'account' }}" class="dropdown-item">
                                 設定
                             </RouterLink>
                             <a class="dropdown-item" v-on:click="logout()">

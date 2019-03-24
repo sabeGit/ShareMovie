@@ -12,11 +12,4 @@ trait AuthFailJson
             'messages' => 'fail login'
         ];
     }
-
-    private function failLogin() : array
-    {
-        return [
-            'messages' => 'fail login'
-        ];
-    }
 }

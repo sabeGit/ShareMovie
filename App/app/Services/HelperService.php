@@ -2,16 +2,24 @@
 
 namespace App\Services;
 use Illuminate\Support\Facades\Storage;
+use App\Exceptions\Common\ExtensionException;
 
 class HelperService
 {
+    use \App\Json\UserFailJson;
+
+    // アップロード可能な画像拡張子
+    const ALLOW_EXTENSIONS = [
+        'png' => 'image/png',
+        'jpg' => 'image/jpeg',
+    ];
 
     /**
      * movie情報からクレジット情報を取得
      *
-     * @var $movie id, title, poster_path, overview
-     * @var $num
-     * @return Array
+     * @param object $movie
+     * @param int    $num
+     * @return array
      */
      public function getCredits($movie, $num)
      {
@@ -36,11 +44,11 @@ class HelperService
      }
 
      /**
-      * movie情報からクレジット情報を取得
+      * パラメータ付きのURLを生成
       *
-      * @var $movie id, title, poster_path, overview
-      * @var $num
-      * @return Array
+      * @param string $url
+      * @param array  $params
+      * @return string
       */
      public function createUrlWithParams($url, $params)
      {
@@ -56,16 +64,11 @@ class HelperService
          return $url;
      }
 
-     public function getUserImage($email)
-     {
-         return 'https://secure.gravatar.com/avatar/'.md5(strtolower(trim($email)));
-     }
-
      /**
       * 映画検索結果（TMDb）から映画idを抽出
       *
-      * @var $movies Array
-      * @return Array
+      * @param array $movies
+      * @return array
       */
      public function getMovieIdsFromSearchRes($movies)
      {
@@ -76,35 +79,67 @@ class HelperService
          return $movieIds;
      }
 
-     public function uploadFileToS3($decodedFile, $path, $fileName, $extension)
+     /**
+      * ファイルをS3へアップロード。
+      * ファイルの拡張子が不適切な場合はエラーメッセージをJSON形式で返す。
+      *
+      * @param string $decodedFile
+      * @param string $path
+      * @param string $fileName
+      * @return array|string
+      */
+     public function uploadFileToS3($decodedFile, $path, $fileName)
      {
+         // ファイル名を生成
          if (!$fileName) {
              $fileName = str_random(40);
          }
+         $extension = $this->getFileExtension($decodedFile);
+
          $fileFullName = $fileName.'.'.$extension;
+
+         // ファイルをアップロード＆ファイルのパスを生成
          $result = Storage::disk('s3')->put('/'.$path.'/'.$fileFullName, $decodedFile, 'public');
          $url = '';
          if ($result) {
              $url = Storage::disk('s3')->url($path.'/'.$fileFullName);
          }
+
          return $url;
      }
 
+
+     /**
+      * アップロードされたファイルをデコード。
+      *
+      * @param string $fileBase64
+      * @return string
+      */
      public function decodeProfileImage($fileBase64)
      {
+         // アップロードされたファイルをデコード
          list(, $fileData) = explode(';', $fileBase64);
          list(, $fileData) = explode(',', $fileData);
          $decodedFile = base64_decode($fileData);
+
          return $decodedFile;
      }
 
-     public function getExtFromFileBase64($fileBase64)
+     /**
+      * base64デコード済みのファイルから拡張子を抽出。
+      * ファイルの拡張子が不適切な場合はエラーメッセージをJSON形式で返す。
+      *
+      * @param string $decodedFile
+      * @return array|string
+      */
+     private function getFileExtension($decodedFile)
      {
-         list($prefix,) = explode(';', $fileBase64);
-         $extension = substr($prefix, strpos($fileBase64, '/') + 1);
-         if ($extension == 'jpeg') {
-             $extension = 'jpg';
+         // base64デコード済みのファイルから拡張子を抽出
+         $mime_type = finfo_buffer(finfo_open(), $decodedFile, FILEINFO_MIME_TYPE);
+         if (!in_array($mime_type, self::ALLOW_EXTENSIONS)) {
+             throw new ExtensionException();
          }
-         return $extension;
+
+         return array_search($mime_type, self::ALLOW_EXTENSIONS);
      }
 }
