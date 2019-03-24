@@ -17,10 +17,10 @@
                                 <input id="password" type="password" class="form-control" name="password" v-model="loginForm.password" required>
                             </div>
                         </div>
-                        <div class="form-check">
+                        <!-- <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" v-model="loginForm.remember">
                             <label class="form-check-label" for="remember">ログイン情報を保存する</label>
-                        </div>
+                        </div> -->
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
