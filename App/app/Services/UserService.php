@@ -59,32 +59,4 @@ class UserService {
         }
         return $array;
     }
-
-    // public function getAttachedMoviesById($user, $movie_id) {
-    //     return $this->userRepo->getAttachedMovieById($user, $movie_id);
-    // }
-    //
-    // public function getAllAttachedMovies($user) {
-    //     return $this->userRepo->getAllAttachedMovies($user);
-    // }
-    //
-    // public function getFavMovies($user) {
-    //     return $this->userRepo->getFavMovies($user);
-    // }
-    //
-    // public function getWatchedMovies($user) {
-    //     return $this->userRepo->getWatchedMovies($user);
-    // }
-    //
-    // public function getMovieUserRelInfo($movieList) {
-    //     $movieListInfo = array();
-    //     if($movieList->isEmpty()) {         // userにmovieが紐づいていない場合
-    //         $movieListInfo['watched'] = false;
-    //         $movieListInfo['favorite']    = false;
-    //     } else {                           // userにmovieが紐づいている場合
-    //         $movieListInfo['watched'] = (bool)$movieList[0]->pivot->watched;
-    //         $movieListInfo['favorite']    = (bool)$movieList[0]->pivot->favorite;
-    //     }
-    //     return $movieListInfo;
-    // }
 }
