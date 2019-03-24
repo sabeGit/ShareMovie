@@ -39,12 +39,13 @@ const actions = {
             return false;
         }
     },
-    async setUpAccount (context, setUpInfo) {
+
+    // ユーザーアカウント情報(ユーザーネーム、プロフィール画像)の更新
+    async editAccount (context, accountForm) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/account', {
-            params: {
-                setUpInfo
-            }
+            profileImage: accountForm.uploadedImage,
+            username    : accountForm.username,
         });
         if (response.status === OK) {
             context.commit('setApiStatus', true);
@@ -55,6 +56,7 @@ const actions = {
         }
         context.commit('error/setCode', response.status, { root: true });
     },
+
     async editFavoriteMovie (context, { favorite, movie }) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/movie/fav',{
@@ -70,6 +72,7 @@ const actions = {
         }
         context.commit('error/setCode', response.status, { root: true });
     },
+
     async editWatchedMovie (context, { watched, movie }) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/movie/watched',{
@@ -85,6 +88,7 @@ const actions = {
         }
         context.commit('error/setCode', response.status, { root: true });
     },
+    
     async editMovieRating (context, { rating, movie }) {
         context.commit('setApiStatus', null);
         const response = await axios.post('/api/user/movie/rating',{

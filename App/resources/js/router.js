@@ -12,7 +12,7 @@ import PasswordReset from './pages/auth/PasswordReset.vue'
 import MovieSearchResult from './pages/movies/MovieSearchResult.vue'
 import MovieDetail from './pages/movies/MovieDetail.vue'
 import UserDetail from './pages/users/UserDetail.vue'
-import UserSetUpAccount from './pages/users/UserSetUpAccount.vue'
+import UserSetting from './pages/users/UserSetting.vue'
 import SystemError from './pages/errors/System.vue'
 
 import store from './store'
@@ -78,9 +78,9 @@ const routes = [
         component: UserDetail
     },
     {
-        path: '/setup/account',
-        name: 'UserSetUpAccount',
-        component: UserSetUpAccount
+        path: '/setting/:option',
+        name: 'UserSetting',
+        component: UserSetting
     },
     {
         path: '/movie/show/:id',

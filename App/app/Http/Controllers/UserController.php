@@ -9,26 +9,25 @@ use App\Services\UserService;
 use App\Services\MovieService;
 use App\Services\StaffService;
 use App\Services\HelperService;
+use App\Exceptions\Common\EditAccountException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-// use App\Exceptions\Common\ExtensionException;
-// use App\Exceptions\Common\S3Exception;
-// use App\Exceptions\Common\SetUpAccountException;
 
 class UserController extends Controller {
 
     protected $userService;
     protected $movieService;
-    protected $staffService;
     protected $helperService;
 
     use \App\Json\UserFailJson;
 
-    public function __construct(UserService $userService, MovieService $movieService, StaffService $staffService, HelperService $helperService)
-    {
+    public function __construct(
+        UserService $userService,
+        MovieService $movieService,
+        HelperService $helperService
+    ) {
         $this->userService   = $userService;
         $this->movieService  = $movieService;
-        $this->staffService  = $staffService;
         $this->helperService = $helperService;
     }
 
@@ -48,8 +47,13 @@ class UserController extends Controller {
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         $movie = $this->movieService->getMovieFromDB($request->movie);
+
         // お気に入り映画リストを編集
-        $this->userService->editFavoriteMovie($request->user(), $request->favorite, $movie->id);
+        $this->userService->editFavoriteMovie(
+            $request->user(),
+            $request->favorite,
+            $movie->id
+        );
         $user = $this->userService->getUserByName($request->user()->name);
         return response()->json($user);
     }
@@ -58,9 +62,15 @@ class UserController extends Controller {
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         $movie = $this->movieService->getMovieFromDB($request->movie);
+
         // 視聴済み映画リストを編集
-        $this->userService->editWatchedMovie($request->user(), $request->watched, $movie->id);
+        $this->userService->editWatchedMovie(
+            $request->user(),
+            $request->watched,
+            $movie->id
+        );
         $user = $this->userService->getUserByName($request->user()->name);
+
         return response()->json($user);
     }
 
@@ -68,38 +78,50 @@ class UserController extends Controller {
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         $movie = $this->movieService->getMovieFromDB($request->movie);
+
         // 視聴済み映画リストを編集
-        $this->userService->editMovieRating($request->user(), $request->rating, $movie->id);
+        $this->userService->editMovieRating(
+            $request->user(),
+            $request->rating,
+            $movie->id
+        );
         $user = $this->userService->getUserByName($request->user()->name);
-        //\Debugbar::info($user);
+
         return response()->json($user);
     }
 
     public function editAccount(Request $request)
     {
-        $allowExt = ['jpeg', 'jpg', 'png'];
-        $fileBase64 = $request->input('params')['setUpInfo']['uploadedImage'];
-        $url = '';
+        // ファイルをS3にアップロード
+        $fileBase64 = $request->profileImage;
         if ($fileBase64) {
-            $extension = $this->helperService->getExtFromFileBase64($fileBase64);
-            if (!array_search($extension, $allowExt)) {
-                return response()->json($this->failFileExtensionException(), 400);
-            }
             $decodedFile = $this->helperService->decodeProfileImage($fileBase64);
-            $url = $this->helperService->uploadFileToS3($decodedFile, 'profile_image', '', $extension);
-            if (!$url) {
-                return response()->json($this->failS3Upload(), 500);
-            }
+            $url = $this->helperService->uploadFileToS3($decodedFile, 'profile_image', '');
         }
-        $result = $this->userService->editAccount($request->user(), $request->input('params')['setUpInfo']['username'], $url);
-        return response()->json($result);
+
+        // ユーザー情報を更新
+        $result = $this->userService->editAccount(
+            $request->user(),
+            $request->username,
+            $url
+        );
+
+        if ($result) {
+            $user = $this->userService->getUserByName($request->user()->name);
+            return response()->json($user);
+        } else {
+            throw new EditAccountException();
+        }
     }
 
     private function getMoviesWithAvgRatingByUsername($username)
     {
         $user = $this->userService->getUserByNameWithMovies($username);
         $movieIds = $this->userService->getMovieIdsFromUser($user);
-        $movies = $this->movieService->getMoviesWithAvgRatingAndUserInfo($movieIds, $user->id);
+        $movies = $this->movieService->getMoviesWithAvgRatingAndUserInfo(
+            $movieIds,
+            $user->id
+        );
         return $movies;
     }
 }

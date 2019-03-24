@@ -16,8 +16,10 @@ class MovieController extends Controller
     /**
      * コンストラクタ
      */
-    public function __construct(MovieService $movieService, HelperService $helperService)
-    {
+    public function __construct(
+        MovieService $movieService,
+        HelperService $helperService
+    ) {
         $this->movieService  = $movieService;
         $this->helperService = $helperService;
     }
@@ -32,16 +34,16 @@ class MovieController extends Controller
             $movies = [];
         } else {
             $freeword = str_replace(array(' ', '　'), '+', $freeword);
-            $params = array(                                  // リクエストパラメータを生成
-                          'api_key'=>env('TMDB_ACCESSKEY'),   // APIキー
-                          'query'=>$freeword,                 // 検索キーワード
-                          'language'=>'ja'                    // 言語
-                      );
+            $params = array(                        // リクエストパラメータを生成
+                'api_key'=>env('TMDB_ACCESSKEY'),   // APIキー
+                'query'=>$freeword,                 // 検索キーワード
+                'language'=>'ja'                    // 言語
+            );
 
             $url = $this->helperService->createUrlWithParams(       // パラメータ付きのリクエストURLを取得
-                                             config('url.SEARCH_BASE_URL'),
-                                             $params
-                                         );
+                config('url.SEARCH_BASE_URL'),
+                $params
+            );
             $json_str = file_get_contents($url);    // URLからAPIを実行
             $json_obj = json_decode($json_str);     // jsonをobjectに変換
             $movies   = $json_obj->results;
@@ -62,15 +64,15 @@ class MovieController extends Controller
     public function getMovieById(Request $request)
     {
         // リクエストURLの生成
-        $params = array(                                             // リクエストパラメータを生成
-                    'api_key'            => env('TMDB_ACCESSKEY'),   // APIキー
-                    'language'           => 'ja',                    // 言語
-                    'append_to_response' => 'credits,videos'         // 検索オプション
-                  );
-        $url = $this->helperService->createUrlWithParams(       // パラメータ付きのリクエストURLを取得
-                                        config('url.GET_BY_ID_BASE_URL').$request->movieId,
-                                        $params
-                                     );
+        $params = array(                                     // リクエストパラメータを生成
+            'api_key'            => env('TMDB_ACCESSKEY'),   // APIキー
+            'language'           => 'ja',                    // 言語
+            'append_to_response' => 'credits,videos'         // 検索オプション
+        );
+        $url = $this->helperService->createUrlWithParams(    // パラメータ付きのリクエストURLを取得
+            config('url.GET_BY_ID_BASE_URL').$request->movieId,
+            $params
+        );
 
         // TMDbAPIをコール & jsonデコード
         $json_str    = file_get_contents($url);    // URLからAPIを実行
@@ -109,14 +111,14 @@ class MovieController extends Controller
     public function getPopularMovieFromTMDB()
     {
         // TMDbAPIをコール
-        $params      = array(                                   // リクエストパラメータを生成
-                           'api_key'=>env('TMDB_ACCESSKEY'),    // APIキー
-                           'language'=>'ja'                     // 言語
-                       );
+        $params = array(                         // リクエストパラメータを生成
+            'api_key'=>env('TMDB_ACCESSKEY'),    // APIキー
+            'language'=>'ja'                     // 言語
+        );
         $url = $this->helperService->createUrlWithParams(    // パラメータ付きのリクエストURLを取得
-                                         config('url.POPULAR_BASE_URL'),
-                                         $params
-                                     );
+            config('url.POPULAR_BASE_URL'),
+            $params
+        );
         $json_str = file_get_contents($url);    // URLからAPIを実行
         $json_obj = json_decode($json_str);     // jsonをobjectに変換
 
