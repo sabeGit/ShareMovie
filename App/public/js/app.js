@@ -42357,7 +42357,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(_vm.actors, function(actor) {
                     return _c("dd", [
-                      _c("a", { attrs: { href: "#" } }, [
+                      _c("span", { staticStyle: { "font-weight": "bold" } }, [
                         _vm._v(_vm._s(actor.name))
                       ]),
                       _vm._v(" "),
@@ -42371,7 +42371,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(_vm.crews, function(crew) {
                     return _c("dd", [
-                      _c("a", { attrs: { href: "#" } }, [
+                      _c("span", { staticStyle: { "font-weight": "bold" } }, [
                         _vm._v(_vm._s(crew.name))
                       ]),
                       _vm._v(" "),
