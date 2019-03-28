@@ -117,6 +117,7 @@ class MovieService
             $movieListInfo['watched'] = (bool)$movieList[0]->pivot->watched;
             $movieListInfo['favorite']    = (bool)$movieList[0]->pivot->favorite;
         }
+
         return $movieListInfo;
     }
 
@@ -130,10 +131,12 @@ class MovieService
     {
         // 対象映画を映画マスタから取得
         $movie = $this->getMovieById($targetMovie['id']);
+
         // 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         if(!$movie) {
             $movie = $this->createMovieAndStaff($targetMovie);
         }
+
         return $movie;
     }
 

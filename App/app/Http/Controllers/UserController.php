@@ -15,12 +15,24 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller {
 
-    protected $userService;
-    protected $movieService;
+    /**
+     * 汎用サービスクラスインスタンス
+     */
     protected $helperService;
+    /**
+     * ユーザーサービスクラスインスタンス
+     */
+    protected $userService;
+    /**
+     * 映画サービスクラスインスタンス
+     */
+    protected $movieService;
 
     use \App\Json\UserFailJson;
 
+    /**
+     * コンストラクタ
+     */
     public function __construct(
         UserService $userService,
         MovieService $movieService,
@@ -31,18 +43,36 @@ class UserController extends Controller {
         $this->helperService = $helperService;
     }
 
+    /**
+     * ユーザーネームからユーザー情報を取得
+     *
+     * @param Request $request
+     * @return json
+     */
     public function getUserByName(Request $request)
     {
         $user = $this->userService->getUserByName($request->input('username'));
         return response()->json($user);
     }
 
-    public function getAllAttachedMovies(Request $request)
-    {
-        $movies = $this->getMoviesWithAvgRatingByUsername($request->input('username'));
-        return response()->json($movie);
-    }
+    /**
+     * ユーザーネームからユーザー情報を取得
+     *
+     * @param Request $request
+     * @return json
+     */
+    // public function getAllAttachedMovies(Request $request)
+    // {
+    //     $movies = $this->getMoviesWithAvgRatingByUsername($request->input('username'));
+    //     return response()->json($movie);
+    // }
 
+    /**
+     * 映画をお気に入りリストを編集
+     *
+     * @param Request $request
+     * @return json
+     */
     public function editFavoriteMovie(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
@@ -54,10 +84,19 @@ class UserController extends Controller {
             $request->favorite,
             $movie->id
         );
+
+        // 最新のユーザー情報を取得
         $user = $this->userService->getUserByName($request->user()->name);
+
         return response()->json($user);
     }
 
+    /**
+     * 映画を視聴済みリストを編集
+     *
+     * @param Request $request
+     * @return json
+     */
     public function editWatchedMovie(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
@@ -69,11 +108,19 @@ class UserController extends Controller {
             $request->watched,
             $movie->id
         );
+
+        // 最新のユーザー情報を取得
         $user = $this->userService->getUserByName($request->user()->name);
 
         return response()->json($user);
     }
 
+    /**
+     * 映画の評価を編集
+     *
+     * @param Request $request
+     * @return json
+     */
     public function editMovieRating(Request $request)
     {
         // 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
@@ -85,11 +132,19 @@ class UserController extends Controller {
             $request->rating,
             $movie->id
         );
+
+        // 最新のユーザー情報を取得
         $user = $this->userService->getUserByName($request->user()->name);
 
         return response()->json($user);
     }
 
+    /**
+     * ユーザーのアカウント情報を編集
+     *
+     * @param Request $request
+     * @return json
+     */
     public function editAccount(Request $request)
     {
         // ファイルをS3にアップロード
@@ -106,6 +161,7 @@ class UserController extends Controller {
             $url
         );
 
+        // 更新成功の場合は最新のユーザー情報、更新失敗の場合はエラーメッセージを返却
         if ($result) {
             $user = $this->userService->getUserByName($request->user()->name);
             return response()->json($user);
@@ -114,14 +170,14 @@ class UserController extends Controller {
         }
     }
 
-    private function getMoviesWithAvgRatingByUsername($username)
-    {
-        $user = $this->userService->getUserByNameWithMovies($username);
-        $movieIds = $this->userService->getMovieIdsFromUser($user);
-        $movies = $this->movieService->getMoviesWithAvgRatingAndUserInfo(
-            $movieIds,
-            $user->id
-        );
-        return $movies;
-    }
+    // private function getMoviesWithAvgRatingByUsername($username)
+    // {
+    //     $user = $this->userService->getUserByNameWithMovies($username);
+    //     $movieIds = $this->userService->getMovieIdsFromUser($user);
+    //     $movies = $this->movieService->getMoviesWithAvgRatingAndUserInfo(
+    //         $movieIds,
+    //         $user->id
+    //     );
+    //     return $movies;
+    // }
 }

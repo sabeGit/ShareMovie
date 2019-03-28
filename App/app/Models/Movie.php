@@ -10,8 +10,10 @@ class Movie extends Model {
 
     protected $appends = ['poster_full_path'];
 
+    const POSTER_PATH_BASE_URL = 'https://image.tmdb.org/t/p/w500/';
+
     public function getPosterFullPathAttribute() {
-        return config('url.POSTER_PATH_BASE_URL') . $this->poster_path;
+        return self::POSTER_PATH_BASE_URL . $this->poster_path;
     }
 
     /**

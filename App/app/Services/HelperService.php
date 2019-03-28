@@ -17,37 +17,42 @@ class HelperService
     /**
      * movie情報からクレジット情報を取得
      *
-     * @param object $movie
-     * @param int    $num
+     * @param object $movie  映画情報
+     * @param int    $num    取得するクレジット情報数
      * @return array
      */
      public function getCredits($movie, $num)
      {
-         $directorArray = array();                     // 監督格納用array
-         $castArray     = array();                     // キャスト格納用array
-         $casts         = $movie['credits']['cast'];   // 映画情報からキャスト情報を取得
-         $crews         = $movie['credits']['crew'];   // 映画情報からスタッフ情報を取得
+         // 映画情報からキャスト情報とスタッフ情報を取得
+         $directorArray = array();
+         $castArray     = array();
+         $casts         = $movie['credits']['cast'];
+         $crews         = $movie['credits']['crew'];
          $top3 = range(0, $num);
          foreach ((array)$casts as $cast) {
+             // orderが0~2のキャストを取得
              if (in_array($cast['order'], $top3)) {
-                 $castArray[] = $cast;   // orderが0~2のキャストを取得
+                 $castArray[] = $cast;
              }
          }
          foreach ((array)$crews as $crew) {
+             // 監督を取得
              if ($crew['department'] == 'Directing') {
-                 $directorArray[] = $crew;   // 監督を取得
+                 $directorArray[] = $crew;
              }
          }
+
          // キャスト情報と監督情報をarrayに格納
          $creditArray   = array('casts'=>$castArray, 'crews'=>$directorArray);
+
          return $creditArray;
      }
 
      /**
       * パラメータ付きのURLを生成
       *
-      * @param string $url
-      * @param array  $params
+      * @param string $url     ベースURL
+      * @param array  $params  URLに付与するパラメーター
       * @return string
       */
      public function createUrlWithParams($url, $params)
@@ -61,6 +66,7 @@ class HelperService
              }
              $count++;
          }
+         
          return $url;
      }
 
@@ -76,6 +82,7 @@ class HelperService
          foreach ($movies as $movie) {
              $movieIds[] = $movie->id;
          }
+
          return $movieIds;
      }
 
@@ -86,7 +93,7 @@ class HelperService
       * @param string $decodedFile
       * @param string $path
       * @param string $fileName
-      * @return array|string
+      * @return string|json
       */
      public function uploadFileToS3($decodedFile, $path, $fileName)
      {
@@ -98,8 +105,12 @@ class HelperService
 
          $fileFullName = $fileName.'.'.$extension;
 
-         // ファイルをアップロード＆ファイルのパスを生成
-         $result = Storage::disk('s3')->put('/'.$path.'/'.$fileFullName, $decodedFile, 'public');
+         // ファイルをアップロード
+         $result = Storage::disk('s3')->put(
+             '/'.$path.'/'.$fileFullName, $decodedFile, 'public'
+         );
+
+         // ファイルのパスを生成
          $url = '';
          if ($result) {
              $url = Storage::disk('s3')->url($path.'/'.$fileFullName);
