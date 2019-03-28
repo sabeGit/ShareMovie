@@ -9,9 +9,27 @@ use App\Services\MovieService;
 
 class MovieController extends Controller
 {
-
+    /**
+     * 汎用サービスクラスインスタンス
+     */
     protected $helperService;
+    /**
+     * 映画サービスクラスインスタンス
+     */
     protected $movieService;
+
+    /**
+     * フリーワード検索URL
+     */
+    const SEARCH_BASE_URL    = 'https://api.themoviedb.org/3/search/movie';
+    /**
+     * ID検索URL
+     */
+    const GET_BY_ID_BASE_URL = 'https://api.themoviedb.org/3/movie/';
+    /**
+     * 人気映画検索URL
+     */
+    const POPULAR_BASE_URL   = 'https://api.themoviedb.org/3/movie/popular';
 
     /**
      * コンストラクタ
@@ -25,32 +43,41 @@ class MovieController extends Controller
     }
 
     /**
-     * searchメソッド
+     * 検索キーワード(freeword)を条件にTMDbAPIで映画を検索
+     *
+     * @param Request $request
+     * @return json
      */
     public function search(Request $request)
     {
-        $freeword = $request->freeword;                    // 検索キーワード
+        // freewordが空の場合、APIを実行しない
+        $freeword = $request->freeword;
         if ($freeword == '') {
             $movies = [];
         } else {
+            // リクエストURLの生成
             $freeword = str_replace(array(' ', '　'), '+', $freeword);
-            $params = array(                        // リクエストパラメータを生成
-                'api_key'=>env('TMDB_ACCESSKEY'),   // APIキー
-                'query'=>$freeword,                 // 検索キーワード
-                'language'=>'ja'                    // 言語
+            $params = array(
+                'api_key'=>env('TMDB_ACCESSKEY'),
+                'query'=>$freeword,
+                'language'=>'ja'
             );
-
-            $url = $this->helperService->createUrlWithParams(       // パラメータ付きのリクエストURLを取得
-                config('url.SEARCH_BASE_URL'),
+            $url = $this->helperService->createUrlWithParams(
+                self::SEARCH_BASE_URL,
                 $params
             );
-            $json_str = file_get_contents($url);    // URLからAPIを実行
-            $json_obj = json_decode($json_str);     // jsonをobjectに変換
+
+            // TMDbAPIをコール & jsonデコード
+            $json_str = file_get_contents($url);
+            $json_obj = json_decode($json_str);
             $movies   = $json_obj->results;
         }
 
+        // API取得映画のサイト内平均評価を取得
         $movieIds  = $this->helperService->getMovieIdsFromSearchRes($movies);
         $moviesWithAvgRating = $this->movieService->getMoviesWithAvgRating($movieIds);
+
+        // API取得映画に平均評価を付与
         foreach ($movies as $movie) {
             $movie->avgRating = 0;
             foreach ($moviesWithAvgRating as $movieWithAvgRating) {
@@ -58,33 +85,40 @@ class MovieController extends Controller
                 $movie->avgRating = intval($movieWithAvgRating->avgRating);
             }
         }
+
         return response()->json($movies);
     }
 
+    /**
+     * 映画IDを条件にTMDbAPIで映画を検索
+     *
+     * @param Request $request
+     * @return json
+     */
     public function getMovieById(Request $request)
     {
         // リクエストURLの生成
-        $params = array(                                     // リクエストパラメータを生成
-            'api_key'            => env('TMDB_ACCESSKEY'),   // APIキー
-            'language'           => 'ja',                    // 言語
-            'append_to_response' => 'credits,videos'         // 検索オプション
+        $params = array(
+            'api_key'            => env('TMDB_ACCESSKEY'),
+            'language'           => 'ja',
+            'append_to_response' => 'credits,videos'
         );
-        $url = $this->helperService->createUrlWithParams(    // パラメータ付きのリクエストURLを取得
-            config('url.GET_BY_ID_BASE_URL').$request->movieId,
+        $url = $this->helperService->createUrlWithParams(
+            self::GET_BY_ID_BASE_URL . $request->movieId,
             $params
         );
 
         // TMDbAPIをコール & jsonデコード
-        $json_str    = file_get_contents($url);    // URLからAPIを実行
-        $movie       = json_decode($json_str);     // jsonをobjectに変換
+        $json_str    = file_get_contents($url);
+        $movie       = json_decode($json_str);
 
         // APIから取得した映画オブジェクトに追加プロパティの初期値を設定
         if ($movie) {
-            $movie->favorite  = 0;      // お気に入り
-            $movie->watched   = 0;      // 視聴済み
-            $movie->rating    = 0;      // 評価
-            $movie->avgRating = 0;      // 平均評価
-            $movie->posts     = null;   // コメント
+            $movie->favorite  = 0;
+            $movie->watched   = 0;
+            $movie->rating    = 0;
+            $movie->avgRating = 0;
+            $movie->posts     = null;
         }
 
         // 平均評価付き映画オブジェクトを取得
@@ -97,32 +131,41 @@ class MovieController extends Controller
         // APIから取得した映画オブジェクトにDBから取得した追加プロパティの値を設定
         if ($movieWithAvgRatingAndUserInfo) {
             if (count($movieWithAvgRatingAndUserInfo->users)) {
-                $movie->favorite = $movieWithAvgRatingAndUserInfo->users[0]->pivot->favorite;   // お気に入り
-                $movie->watched  = $movieWithAvgRatingAndUserInfo->users[0]->pivot->watched;    // 視聴済み
-                $movie->rating   = $movieWithAvgRatingAndUserInfo->users[0]->pivot->rating;     // 評価
+                $movie->favorite = $movieWithAvgRatingAndUserInfo->users[0]->pivot->favorite;
+                $movie->watched  = $movieWithAvgRatingAndUserInfo->users[0]->pivot->watched;
+                $movie->rating   = $movieWithAvgRatingAndUserInfo->users[0]->pivot->rating;
             }
-            $movie->posts     = $movieWithAvgRatingAndUserInfo->posts;              // コメント
-            $movie->avgRating = intval($movieWithAvgRatingAndUserInfo->avgRating);  // 平均評価
+            $movie->posts     = $movieWithAvgRatingAndUserInfo->posts;
+            $movie->avgRating = intval($movieWithAvgRatingAndUserInfo->avgRating);
         }
-        // \Debugbar::info($movie);
+
         return response()->json($movie);
     }
 
+    /**
+     * TMDbから人気映画を取得
+     * ホーム画面の背景画像に使用
+     *
+     * @param Request $request
+     * @return json
+     */
     public function getPopularMovieFromTMDB()
     {
-        // TMDbAPIをコール
-        $params = array(                         // リクエストパラメータを生成
-            'api_key'=>env('TMDB_ACCESSKEY'),    // APIキー
-            'language'=>'ja'                     // 言語
+        // リクエストURLの生成
+        $params = array(
+            'api_key'=>env('TMDB_ACCESSKEY'),
+            'language'=>'ja'
         );
-        $url = $this->helperService->createUrlWithParams(    // パラメータ付きのリクエストURLを取得
-            config('url.POPULAR_BASE_URL'),
+        $url = $this->helperService->createUrlWithParams(
+            self::POPULAR_BASE_URL,
             $params
         );
-        $json_str = file_get_contents($url);    // URLからAPIを実行
-        $json_obj = json_decode($json_str);     // jsonをobjectに変換
 
+        // TMDbAPIをコール & jsonデコード
+        $json_str = file_get_contents($url);
+        $json_obj = json_decode($json_str);
         $movies   = $json_obj->results;
+
         return response()->json($movies[0]);
     }
 }

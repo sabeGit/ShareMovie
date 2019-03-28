@@ -7,30 +7,48 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-
+    /**
+     * コンストラクタ
+     */
     public function __construct()
     {
         $this->middleware('confirm', ['only' => 'login']);
     }
 
-    public function login() {
+    /**
+     * ログイン
+     * ログイン成功時はアクセストークン、失敗時はエラーコードを返却
+     *
+     * @return json
+     */
+    public function login()
+    {
+        // リクエスト内容をもとにログイン
         $credentials = request(['email', 'password']);
-            if (!$token = auth('api')->attempt($credentials)) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         return $this->respondWithToken($token);
     }
 
-    // public function logout() {
-    //     auth()->logout();
-    //     return response()->json(['message' => 'ログアウトしました。']);
-    // }
-
-    public function me() {
+    /**
+     * ログインユーザーの取得
+     *
+     * @return json
+     */
+    public function me()
+    {
         return response()->json(auth()->user());
     }
 
-    protected function respondWithToken($token) {
+    /**
+     * トークン付きjsonを返却
+     *
+     * @return json
+     */
+    protected function respondWithToken($token)
+    {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
