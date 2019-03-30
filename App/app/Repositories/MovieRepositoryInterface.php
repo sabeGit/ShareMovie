@@ -7,76 +7,51 @@ interface MovieRepositoryInterface
     /**
      * idからmovieを取得
      *
-     * @var $movie_id
-     * @return Illuminate\Database\Eloquent\Model
+     * @param int $movie_id
+     * @return Movie
      */
     public function getMovieById($movie_id);
 
     /**
      * movieを作成
      *
-     * @var $obj id, title, poster_path, overview
-     * @return Illuminate\Database\Eloquent\Model
+     * @param object $movie
+     * @return Movie
      */
-    public function create($obj);
+    public function create($movie);
 
     /**
      * movieとstaffを紐づけ
      *
+     * @param Movie $movie
+     * @param array $staffArray
+     * @return void
      */
     public function attachStaffs($movie, $staffArray);
 
     /**
-     * 映画の平均評価を取得（ユーザー情報付き）
+     * 映画の平均評価を取得（ユーザー情報付き）（単数）
      *
-     * @return Movie|平均評価付き映画
+     * @param int $movie_id
+     * @param int $user_id
+     * @return Movie
      */
     public function getMovieWithAvgRatingAndUserInfo($movie_id, $user_id);
 
     /**
-     * 映画の平均評価を取得
+     * 映画の平均評価を取得（ユーザー情報付き）（複数）
      *
-     * @return Movie|平均評価付き映画
-     */
-    public function getMoviesWithAvgRating($movieIds);
-
-    /**
-     * 映画の平均評価を取得（ユーザー情報付き）
-     *
-     * @return Movie|平均評価付き映画
+     * @param array $movieIds
+     * @param int   $user_id
+     * @return Movie
      */
     public function getMoviesWithAvgRatingAndUserInfo($movieIds, $user_id);
 
-    // /**
-    //  * 映画の平均評価を取得
-    //  *
-    //  * @return Movie
-    //  */
-    // public function getMoviesWithAvgRatingById($movie_id);
-
-    // /**
-    //  * 映画の平均評価とユーザー情報を取得
-    //  *
-    //  * @param Model|$movie|映画
-    //  * @return int|平均評価
-    //  */
-    // public function getMoviesWithAvgRatingWithUser($movie_id);
-
     /**
-     * userとmovieの紐づき情報を取得(単数)
+     * 映画の平均評価を取得
      *
+     * @param array $movieIds
+     * @return Movie
      */
-    public function getAttachedMovieById($user, $movie_id);
-
-    /**
-     * userのお気に入り映画リストを取得
-     *
-     */
-    public function getFavMovies($user);
-
-    /**
-     * userの視聴済み映画リストを取得
-     *
-     */
-    public function getWatchedMovies($user);
+    public function getMoviesWithAvgRating($movieIds);
 }

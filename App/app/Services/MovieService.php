@@ -10,9 +10,22 @@ use App\Services\StaffService;
 class MovieService
 {
 
+    /**
+     * 映画レポジトリクラスインスタンス
+     */
     protected $movieRepo;
-    protected $helperService, $staffService;
+    /**
+     * 汎用サービスクラスインスタンス
+     */
+    protected $helperService;
+    /**
+     * スタッフサービスクラスインスタンス
+     */
+    protected $staffService;
 
+    /**
+     * コンストラクタ
+     */
     public function __construct(
         MovieRepositoryInterface $movieRepo,
         HelperService $helperService,
@@ -26,8 +39,8 @@ class MovieService
     /**
      * idからmovieを取得
      *
-     * @var $movie_id
-     * @return Illuminate\Database\Eloquent\Model
+     * @param int $movie_id
+     * @return Movie
      */
     public function getMovieById($movie_id)
     {
@@ -37,28 +50,32 @@ class MovieService
     /**
      * movieを作成
      *
-     * @var $obj id, title, poster_path, overview
-     * @return Illuminate\Database\Eloquent\Model
+     * @param object $movie
+     * @return Movie
      */
-    public function create($obj)
+    public function create($movie)
     {
-        return $this->movieRepo->create($obj);
+        return $this->movieRepo->create($movie);
     }
 
     /**
-     * movieとstaffを紐づけ
+     * 映画の平均評価を取得（ユーザー情報付き）（単数）
      *
+     * @param int $movie_id
+     * @param int $user_id
+     * @return Movie
      */
-    public function attachStaffs($movie, $staffArray)
+    public function getMovieWithAvgRatingAndUserInfo($movie_id, $user_id)
     {
-        return $this->movieRepo->attachStaffs($movie, $staffArray);
+        return $this->movieRepo->getMovieWithAvgRatingAndUserInfo($movie_id, $user_id);
     }
 
     /**
-     * 映画の平均評価を取得（ユーザー情報付き）
+     * 映画の平均評価を取得（ユーザー情報付き）（複数）
      *
-     * @param array|$movieIds|映画id
-     * @return Movie|平均評価
+     * @param array $movieIds
+     * @param int   $user_id
+     * @return Movie
      */
     public function getMoviesWithAvgRatingAndUserInfo($movieIds, $user_id)
     {
@@ -68,8 +85,8 @@ class MovieService
     /**
      * 映画の平均評価を取得
      *
-     * @param array|$movieIds|映画id
-     * @return Movie|平均評価
+     * @param array $movieIds
+     * @return Movie
      */
     public function getMoviesWithAvgRating($movieIds)
     {
@@ -77,61 +94,15 @@ class MovieService
     }
 
     /**
-     * 映画の平均評価を取得（ユーザー情報付き）
-     *
-     * @param int|$movie_id|映画id
-     * @return Movie|平均評価付き映画
-     */
-    public function getMovieWithAvgRatingAndUserInfo($movie_id, $user_id)
-    {
-        return $this->movieRepo->getMovieWithAvgRatingAndUserInfo($movie_id, $user_id);
-    }
-
-    public function getAttachedMovieById($user, $movie_id)
-    {
-        return $this->movieRepo->getAttachedMovieById($user, $movie_id);
-    }
-
-    public function getAllAttachedMovies($user)
-    {
-        return $this->movieRepo->getAllAttachedMovies($user);
-    }
-
-    public function getFavMovies($user)
-    {
-        return $this->movieRepo->getFavMovies($user);
-    }
-
-    public function getWatchedMovies($user)
-    {
-        return $this->movieRepo->getWatchedMovies($user);
-    }
-
-    public function getMovieUserRelInfo($movieList)
-    {
-        $movieListInfo = array();
-        if($movieList->isEmpty()) {         // userにmovieが紐づいていない場合
-            $movieListInfo['watched'] = false;
-            $movieListInfo['favorite']    = false;
-        } else {                           // userにmovieが紐づいている場合
-            $movieListInfo['watched'] = (bool)$movieList[0]->pivot->watched;
-            $movieListInfo['favorite']    = (bool)$movieList[0]->pivot->favorite;
-        }
-
-        return $movieListInfo;
-    }
-
-    /**
      * 対象映画を映画マスタから取得 or 映画マスタに存在しない場合、requestをもとに映画レコードを作成
      *
-     * @param Array|$movie|映画 (json)
-     * @return Object
+     * @param object $targetMovie
+     * @return Movie
      */
     public function getMovieFromDB($targetMovie)
     {
         // 対象映画を映画マスタから取得
         $movie = $this->getMovieById($targetMovie['id']);
-
         // 映画マスタに存在しない場合、requestをもとに映画レコードを作成
         if(!$movie) {
             $movie = $this->createMovieAndStaff($targetMovie);
@@ -140,12 +111,23 @@ class MovieService
         return $movie;
     }
 
+    /**
+     * APIから取得した映画情報をDBに保存
+     *
+     * @param object $targetMovie
+     * @return Movie
+     */
     public function createMovieAndStaff($targetMovie)
     {
-        $creditArray = $this->helperService->getCredits($targetMovie, 3);  // クレジット情報を取得
-        $targetStaff = $this->staffService->create($creditArray);          // クレジット情報をもとにstaffレコード作成
-        $movie = $this->create($targetMovie);                // 映画情報をもとにmovieレコード作成
-        $this->attachStaffs($movie, $targetStaff);           // movieレコードとstaffレコードを紐づけ
+        // クレジット情報を取得
+        $creditArray = $this->helperService->getCredits($targetMovie, 3);
+        // クレジット情報をもとにstaffレコード作成
+        $targetStaff = $this->staffService->create($creditArray);
+        // 映画情報をもとにmovieレコード作成
+        $movie = $this->create($targetMovie);
+        // movieレコードとstaffレコードを紐づけ
+        $this->movieRepo->attachStaffs($movie, $targetStaff);
+
         return $movie;
     }
 }
