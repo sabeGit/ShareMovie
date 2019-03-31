@@ -8,12 +8,15 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Post;
 
-class User extends Authenticatable implements JWTSubject 
+class User extends Authenticatable implements JWTSubject
 {
 
     protected $fillable = [
-        'name', 'email', 'password',
-        'email_verified', 'email_verify_token',
+        'name',
+        'email',
+        'password',
+        'email_verified',
+        'email_verify_token',
         'profile_image'
     ];
 
