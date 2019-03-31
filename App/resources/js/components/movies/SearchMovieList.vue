@@ -1,5 +1,6 @@
 <template>
     <div class="movie-list">
+        <p>検索結果：{{ searchResultCount }}件</p>
         <div v-for="movie in movieList" class="movie-item">
             <div class="poster">
                 <img class="poster-img" v-bind:src="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" alt="Sample">
@@ -27,15 +28,12 @@ export default {
     components: {
         RateAction
     },
-    // props: {
-    //     isEditable: {
-    //         type: Boolean,
-    //         required: true,
-    //     }
-    // },
     computed: {
         movieList () {
             return this.$store.getters['movie/movies'];
+        },
+        searchResultCount () {
+            return this.$store.getters['movie/moviesCount'];
         }
     },
 }

@@ -27,6 +27,9 @@ const getters = {
     watchedMovies: state => {
         return state.movies ? state.movies.filter(movie => movie.pivot.watched) :null
     },
+    moviesCount: state => {
+        return state.movies ? state.movies.length : 0
+    },
     watchedMoviesCount: state => {
         return state.movies ? state.movies.filter(movie => movie.pivot.watched).length : 0
     },
@@ -69,7 +72,6 @@ const actions = {
                 userId: userId
             }
         });
-        console.log(response)
         if (response.status === OK) {
             context.commit('setApiStatus', true);
             context.commit('post/setPosts', response.data.posts, { root: true });
