@@ -5,75 +5,64 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
 use App\Models\Post;
 
-//class User extends Authenticatable implements MustVerifyEmailContract {
-class User extends Authenticatable implements JWTSubject {
-    //use HasApiTokens, MustVerifyEmail, Notifiable;
-    // use Notifiable;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+class User extends Authenticatable implements JWTSubject 
+{
+
     protected $fillable = [
         'name', 'email', 'password',
         'email_verified', 'email_verify_token',
         'profile_image'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function getJWTIdentifier() {
+    /**
+     * トークン取得
+     *
+     * @return string
+     */
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims() {
+    /**
+     * 追加トークン情報
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 
-    public function posts() {
+    /**
+     * ポストテーブルとのリレーション情報
+     *
+     * @return Post
+     */
+    public function posts()
+    {
         return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
     }
 
-    public function favoriteMovies() {
-        return $this->belongsToMany('App\Models\Movie', 'favorite')->withTimestamps();
-    }
-
-    public function watchedMovies() {
-        return $this->belongsToMany('App\Models\Movie', 'watched')->withTimestamps();
-    }
-
-    public function ratedMovies() {
-        return $this->belongsToMany('App\Models\Movie', 'rating')->withTimestamps();
-    }
-
-    public function movies() {
-        return $this->belongsToMany('App\Models\Movie', 'movie_user_rels', 'user_id', 'movie_id')->withPivot('watched', 'favorite', 'rating')->withTimestamps();
-    }
-
-    public function avgRating() {
-        return $this->belongsToMany('App\Models\Movie', 'movie_user_rels', 'user_id', 'movie_id')
-            ->withPivot('watched', 'favorite', 'rating')->withTimestamps()
-            ->selectRaw('AVG(rating) avg, movie_id, overview')
-            ->groupBy('movie_id');
-    }
-
-    public function getMoviesWithAvgRatingAttribute() {
-        if ( ! array_key_exists('avgRating', $this->relations)) $this->load('avgRating');
-
-        $related = $this->getRelation('avgRating')->first();
-
-        return ($related) ? $related->aggregate : 0;
+    /**
+     * 映画テーブルとのリレーション情報
+     *
+     * @return Movie
+     */
+    public function movies()
+    {
+        return $this->belongsToMany(
+            'App\Models\Movie',
+            'movie_user_rels',
+            'user_id',
+            'movie_id'
+        )->withPivot('watched', 'favorite', 'rating')->withTimestamps();
     }
 }

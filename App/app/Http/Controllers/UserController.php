@@ -56,18 +56,6 @@ class UserController extends Controller {
     }
 
     /**
-     * ユーザーネームからユーザー情報を取得
-     *
-     * @param Request $request
-     * @return json
-     */
-    // public function getAllAttachedMovies(Request $request)
-    // {
-    //     $movies = $this->getMoviesWithAvgRatingByUsername($request->input('username'));
-    //     return response()->json($movie);
-    // }
-
-    /**
      * 映画をお気に入りリストを編集
      *
      * @param Request $request
@@ -169,15 +157,4 @@ class UserController extends Controller {
             throw new EditAccountException();
         }
     }
-
-    // private function getMoviesWithAvgRatingByUsername($username)
-    // {
-    //     $user = $this->userService->getUserByNameWithMovies($username);
-    //     $movieIds = $this->userService->getMovieIdsFromUser($user);
-    //     $movies = $this->movieService->getMoviesWithAvgRatingAndUserInfo(
-    //         $movieIds,
-    //         $user->id
-    //     );
-    //     return $movies;
-    // }
 }

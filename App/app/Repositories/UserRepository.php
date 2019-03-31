@@ -7,51 +7,38 @@ class UserRepository implements UserRepositoryInterface {
 
     protected $user;
 
-    public function __construct(User $user) {
+    /**
+     * コンストラクタ
+     *
+     * @return void
+     */
+    public function __construct(User $user)
+    {
         $this->user = $user;
     }
 
     /**
-     * idからuserを取得
+     * ユーザーを取得　取得条件：ユーザーネーム
      *
-     * @param int|$user_id|ユーザーid
+     * @param string $username
      * @return User
      */
-    public function getById($user_id) {
-        return $this->user->find($user_id);
-    }
-
-    /**
-     * userを取得
-     *
-     * @param string|$username|ユーザー名
-     * @return Model
-     */
-    public function getUserByName($username) {
+    public function getUserByName($username)
+    {
         $user = $this->user->where('name', $username)->first();
         return $user->load('movies', 'posts.user', 'posts.movie');
     }
 
     /**
-     * 映画が紐づいたuserを取得
+     * 映画のお気に入り情報を更新
      *
-     * @param string|$username|ユーザー名
-     * @return Model
+     * @param User    $user
+     * @param boolean $favorite
+     * @param int     $movie_id
+     * @return void
      */
-    public function getUserByNameWithMovies($username) {
-        $user = $this->user->where('name', $username)->first();
-        return $user->load('movies', 'posts');
-    }
-
-    /**
-     * お気に入り映画リストを編集
-     *
-     * @param Model|$user|ユーザー
-     * @param bool|$favorite|お気に入り登録情報
-     * @param int|$movie_id|映画id
-     * @return array|紐づけ結果
-     */
-    public function editFavoriteMovie($user, $favorite, $movie_id) {
+    public function editFavoriteMovie($user, $favorite, $movie_id)
+    {
         return $user->movies()->syncWithoutDetaching([
             $movie_id =>
             [
@@ -61,14 +48,15 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
-     * 視聴済み映画リストを編集
+     * 映画の視聴済み情報を更新
      *
-     * @param Model|$user|ユーザー
-     * @param bool|$watched|視聴済み登録情報
-     * @param int|$movie_id|映画id
-     * @return array|紐づけ結果
+     * @param User    $user
+     * @param boolean $watched
+     * @param int     $movie_id
+     * @return void
      */
-    public function editWatchedMovie($user, $watched, $movie_id) {
+    public function editWatchedMovie($user, $watched, $movie_id)
+    {
         return $user->movies()->syncWithoutDetaching([
             $movie_id =>
             [
@@ -78,14 +66,15 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
-     * 評価を編集
+     * 映画のお気に入り情報を更新
      *
-     * @param Model|$user|ユーザー
-     * @param bool|$rating|評価
-     * @param int|$movie_id|映画id
-     * @return array|紐づけ結果
+     * @param User $user
+     * @param int  $favorite
+     * @param int  $movie_id
+     * @return void
      */
-    public function editMovieRating($user, $rating, $movie_id) {
+    public function editMovieRating($user, $rating, $movie_id)
+    {
         return $user->movies()->syncWithoutDetaching([
             $movie_id =>
             [
@@ -96,14 +85,15 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
-     * アカウント情報を更新
+     * ユーザーのアカウント情報（ユーザーネーム、プロフィール画像）を更新
      *
-     * @param Model|$user|ユーザー
-     * @param String|$username|ユーザー名
-     * @param String|$imageUrl|プロフィール画像URL
-     * @return Model|$user|更新後ユーザー
+     * @param User   $user
+     * @param string $username
+     * @param string $imageUrl
+     * @return void
      */
-    public function editAccount($user, $username, $imageUrl) {
+    public function editAccount($user, $username, $imageUrl)
+    {
         return $user->update([
             'name' => $username,
             'profile_image' => $imageUrl

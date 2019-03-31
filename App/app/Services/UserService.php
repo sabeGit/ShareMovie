@@ -4,55 +4,94 @@ namespace App\Services;
 
 use App\Repositories\UserRepositoryInterface;
 
-class UserService {
-
+class UserService
+{
+    /**
+     * ユーザーサービスクラスインスタンス
+     */
     protected $userRepo;
 
-    public function __construct(UserRepositoryInterface $userRepo) {
+    /**
+     * コンストラクタ
+     *
+     * @return void
+     */
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
         $this->userRepo = $userRepo;
     }
 
     /**
-     * idからuserを取得
+     * ユーザーを取得　取得条件：ユーザーネーム
      *
-     * @var $user_id
-     * @return Illuminate\Database\Eloquent\Model
+     * @param string $username
+     * @return User
      */
-    public function getById($user_id) {
-        return $this->userRepo->getById($user_id);
-    }
-
-    public function getUserByName($username) {
+    public function getUserByName($username)
+    {
         return $this->userRepo->getUserByName($username);
     }
 
-    public function getUserByNameWithMovies($username) {
-        return $this->userRepo->getUserByNameWithMovies($username);
-    }
-
-    public function editFavoriteMovie($user, $favorite, $movie_id) {
+    /**
+     * 映画のお気に入り情報を更新
+     *
+     * @param User    $user
+     * @param boolean $favorite
+     * @param int     $movie_id
+     * @return void
+     */
+    public function editFavoriteMovie($user, $favorite, $movie_id)
+    {
         return $this->userRepo->editFavoriteMovie($user, $favorite, $movie_id);
     }
 
-    public function editWatchedMovie($user, $watched, $movie_id) {
+    /**
+     * 映画の視聴済み情報を更新
+     *
+     * @param User    $user
+     * @param boolean $watched
+     * @param int     $movie_id
+     * @return void
+     */
+    public function editWatchedMovie($user, $watched, $movie_id)
+    {
         return $this->userRepo->editWatchedMovie($user, $watched, $movie_id);
     }
 
-    public function editMovieRating($user, $rating, $movie_id) {
+    /**
+     * 映画のお気に入り情報を更新
+     *
+     * @param User $user
+     * @param int  $favorite
+     * @param int  $movie_id
+     * @return void
+     */
+    public function editMovieRating($user, $rating, $movie_id)
+    {
         return $this->userRepo->editMovieRating($user, $rating, $movie_id);
     }
 
-    public function editAccount($user, $username, $imageUrl) {
+    /**
+     * ユーザーのアカウント情報（ユーザーネーム、プロフィール画像）を更新
+     *
+     * @param User   $user
+     * @param string $username
+     * @param string $imageUrl
+     * @return void
+     */
+    public function editAccount($user, $username, $imageUrl)
+    {
         return $this->userRepo->editAccount($user, $username, $imageUrl);
     }
 
     /**
      * userコレクションに紐づいた映画idを抽出
      *
-     * @param collection|$user|ユーザー
-     * @return array|映画id
+     * @param User $user
+     * @return array
      */
-    public function getMovieIdsFromUser($user) {
+    public function getMovieIdsFromUser($user)
+    {
         $array = array();
         foreach ($user->movies as $movie) {
             $array[] = $movie->id;
