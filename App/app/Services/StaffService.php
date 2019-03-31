@@ -4,32 +4,33 @@ namespace App\Services;
 
 use App\Repositories\StaffRepositoryInterface;
 
-class StaffService {
-
-    protected $staffRepo;
-
-    public function __construct(StaffRepositoryInterface $staffRepo) {
-        $this->staffRepo = $staffRepo;
-    }
+class StaffService
+{
 
     /**
-     * idからstaffを取得
-     *
-     * @var $staff_id
-     * @return Illuminate\Database\Eloquent\Model
+     * スタッフサービスクラスインスタンス
      */
-    public function getById($staff_id) {
-        return $this->staffRepo->getById($staff_id);
+    protected $staffRepo;
+
+    /**
+     * コンストラクタ
+     *
+     * @return void
+     */
+    public function __construct(StaffRepositoryInterface $staffRepo)
+    {
+        $this->staffRepo = $staffRepo;
     }
 
     /**
      * staffを作成
      *
-     * @var $obj id, title, poster_path, overview
-     * @return Illuminate\Database\Eloquent\Model
+     * @param object $staff
+     * @return Staff
      */
-    public function create($obj) {
-        return $this->staffRepo->create($obj);
+    public function create($staff)
+    {
+        return $this->staffRepo->create($staff);
     }
 
 }

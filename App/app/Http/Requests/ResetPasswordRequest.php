@@ -36,8 +36,8 @@ class ResetPasswordRequest extends FormRequest
         return [
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは6文字以上で入力してください',
+            'password.confirmed' => 'パスワードが異なります',
             'password_confirmation.required' => 'パスワード（確認）を入力してください',
-            'password_confirmation.confirmed' => 'パスワードが異なります',
         ];
     }
 

@@ -4,51 +4,52 @@ namespace App\Repositories;
 
 interface UserRepositoryInterface
 {
-    /**
-     * idからuserを取得
-     *
-     * @var $user_id
-     * @return Illuminate\Database\Eloquent\Model
-     */
-    public function getById($user_id);
 
     /**
-     * nameからuserを取得
+     * ユーザーを取得　取得条件：ユーザーネーム
      *
-     * @var $username
-     * @return Illuminate\Database\Eloquent\Model
+     * @param string $username
+     * @return User
      */
     public function getUserByName($username);
 
     /**
-     * nameから映画が紐づいたuserを取得
+     * 映画のお気に入り情報を更新
      *
-     * @var $username
-     * @return Illuminate\Database\Eloquent\Model
-     */
-    public function getUserByNameWithMovies($username);
-
-    /**
-     * お気に入り映画リストを編集
-     *
+     * @param User    $user
+     * @param boolean $favorite
+     * @param int     $movie_id
+     * @return void
      */
     public function editFavoriteMovie($user, $favorite, $movie_id);
 
     /**
-     * 視聴済み映画リストを編集
+     * 映画の視聴済み情報を更新
      *
+     * @param User    $user
+     * @param boolean $watched
+     * @param int     $movie_id
+     * @return void
      */
     public function editWatchedMovie($user, $watched, $movie_id);
 
     /**
-     * 評価を編集
+     * 映画のお気に入り情報を更新
      *
+     * @param User $user
+     * @param int  $favorite
+     * @param int  $movie_id
+     * @return void
      */
     public function editMovieRating($user, $rating, $movie_id);
 
     /**
-     * 評価を編集
+     * ユーザーのアカウント情報（ユーザーネーム、プロフィール画像）を更新
      *
+     * @param User   $user
+     * @param string $username
+     * @param string $imageUrl
+     * @return void
      */
     public function editAccount($user, $username, $imageUrl);
 

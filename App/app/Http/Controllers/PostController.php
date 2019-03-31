@@ -11,7 +11,7 @@ use App\Services\MovieService;
 class PostController extends Controller
 {
     /**
-     * 映画サービスクラスインスタンス
+     * ポストサービスクラスインスタンス
      */
     protected $postService;
     /**
@@ -22,8 +22,10 @@ class PostController extends Controller
     /**
      * コンストラクタ
      */
-    public function __construct(PostService $postService, MovieService $movieService)
-    {
+    public function __construct(
+        PostService $postService,
+        MovieService $movieService
+    ) {
         $this->middleware('auth');
         $this->postService = $postService;
         $this->movieService = $movieService;

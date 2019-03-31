@@ -7,15 +7,25 @@ use App\User;
 use App\Models\Movie;
 use DateTime;
 
-class Post extends Model {
+class Post extends Model
+{
+    /**
+     * fillableカラム
+     */
+    protected $fillable = ['content', 'created_at'];
 
-    protected $guarded = array('id');
+    /**
+     * guardedカラム
+     */
+    protected $guarded = ['id'];
 
-    protected $fillable = ['id', 'content', 'created_at'];
-
+    /**
+     * 追加カラム：投稿経過時間
+     */
     protected $appends = ['post_at'];
 
-    public function getPostAtAttribute() {
+    public function getPostAtAttribute()
+    {
         $now = new DateTime();
         $interval = $now->diff($this->created_at);
         if($interval->y !== 0) {
@@ -30,11 +40,6 @@ class Post extends Model {
             return $interval->s.'秒前';
         }
     }
-
-    public static $rules = array(
-        'user_id' => 'required',
-        'content' => 'size:65535'
-    );
 
     public function user()
     {
