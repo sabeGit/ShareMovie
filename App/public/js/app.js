@@ -2332,20 +2332,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     RateAction: _components_movies_RateAction_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  // props: {
-  //     isEditable: {
-  //         type: Boolean,
-  //         required: true,
-  //     }
-  // },
   computed: {
     movieList: function movieList() {
       return this.$store.getters['movie/movies'];
+    },
+    searchResultCount: function searchResultCount() {
+      return this.$store.getters['movie/moviesCount'];
     }
   }
 });
@@ -40774,72 +40772,76 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "movie-list" },
-    _vm._l(_vm.movieList, function(movie) {
-      return _c("div", { staticClass: "movie-item" }, [
-        _c("div", { staticClass: "poster" }, [
-          _c("img", {
-            staticClass: "poster-img",
-            attrs: {
-              src: "https://image.tmdb.org/t/p/w500/" + movie.poster_path,
-              alt: "Sample"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "movie-content" }, [
-          _c(
-            "div",
-            { staticClass: "movie-header" },
-            [
-              _c(
-                "RouterLink",
-                {
-                  staticClass: "movie-title",
-                  attrs: {
-                    to: { name: "MovieDetail", params: { id: movie.id } }
-                  }
-                },
-                [_vm._v(_vm._s(movie.title))]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "avg-rating-section" }, [
-                _c(
-                  "div",
-                  { staticClass: "rate-action read-only" },
-                  [
-                    _c("p", { staticClass: "rating-label" }, [
-                      _vm._v("平均評価：")
-                    ]),
-                    _vm._v(" "),
-                    _c("RateAction", {
-                      attrs: {
-                        movie: movie,
-                        rating: movie.avgRating,
-                        isEditable: false
-                      }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ],
-            1
-          ),
+    [
+      _c("p", [_vm._v("検索結果：" + _vm._s(_vm.searchResultCount) + "件")]),
+      _vm._v(" "),
+      _vm._l(_vm.movieList, function(movie) {
+        return _c("div", { staticClass: "movie-item" }, [
+          _c("div", { staticClass: "poster" }, [
+            _c("img", {
+              staticClass: "poster-img",
+              attrs: {
+                src: "https://image.tmdb.org/t/p/w500/" + movie.poster_path,
+                alt: "Sample"
+              }
+            })
+          ]),
           _vm._v(" "),
-          _c("div", { staticClass: "movie-body" }, [
+          _c("div", { staticClass: "movie-content" }, [
             _c(
-              "p",
-              {
-                staticClass: "movie-overview",
-                staticStyle: { "-webkit-box-orient": "vertical" }
-              },
-              [_vm._v(_vm._s(movie.overview))]
-            )
+              "div",
+              { staticClass: "movie-header" },
+              [
+                _c(
+                  "RouterLink",
+                  {
+                    staticClass: "movie-title",
+                    attrs: {
+                      to: { name: "MovieDetail", params: { id: movie.id } }
+                    }
+                  },
+                  [_vm._v(_vm._s(movie.title))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "avg-rating-section" }, [
+                  _c(
+                    "div",
+                    { staticClass: "rate-action read-only" },
+                    [
+                      _c("p", { staticClass: "rating-label" }, [
+                        _vm._v("平均評価：")
+                      ]),
+                      _vm._v(" "),
+                      _c("RateAction", {
+                        attrs: {
+                          movie: movie,
+                          rating: movie.avgRating,
+                          isEditable: false
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "movie-body" }, [
+              _c(
+                "p",
+                {
+                  staticClass: "movie-overview",
+                  staticStyle: { "-webkit-box-orient": "vertical" }
+                },
+                [_vm._v(_vm._s(movie.overview))]
+              )
+            ])
           ])
         ])
-      ])
-    }),
-    0
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -60277,6 +60279,9 @@ var getters = {
       return movie.pivot.watched;
     }) : null;
   },
+  moviesCount: function moviesCount(state) {
+    return state.movies ? state.movies.length : 0;
+  },
   watchedMoviesCount: function watchedMoviesCount(state) {
     return state.movies ? state.movies.filter(function (movie) {
       return movie.pivot.watched;
@@ -60336,10 +60341,9 @@ var actions = {
 
             case 5:
               response = _context.sent;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context.next = 11;
+                _context.next = 10;
                 break;
               }
 
@@ -60349,7 +60353,7 @@ var actions = {
               });
               return _context.abrupt("return", response.data);
 
-            case 11:
+            case 10:
             case "end":
               return _context.stop();
           }
