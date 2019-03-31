@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Repositories\PostRepositoryInterface;
 
-class PostService {
+class PostService
+{
 
     protected $postRepo;
 
-    public function __construct(PostRepositoryInterface $postRepo) {
+    public function __construct(PostRepositoryInterface $postRepo)
+    {
         $this->postRepo = $postRepo;
     }
 
@@ -18,7 +20,8 @@ class PostService {
      * @param Request $request
      * @return Object
      */
-    public function create($request) {
+    public function create($request)
+    {
         return $this->postRepo->create($request);
     }
 

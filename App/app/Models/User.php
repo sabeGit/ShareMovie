@@ -11,17 +11,24 @@ use App\Models\Post;
 class User extends Authenticatable implements JWTSubject
 {
 
+    /**
+     * fillableカラム
+     */
     protected $fillable = [
         'name',
         'email',
-        'password',
         'email_verified',
         'email_verify_token',
         'profile_image'
     ];
 
-    protected $hidden = [
-        'password', 'remember_token',
+    /**
+     * guardedカラム
+     */
+    protected $guarded = [
+        'id',
+        'password',
+        'remember_token',
     ];
 
     /**

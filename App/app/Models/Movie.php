@@ -7,8 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Movie extends Model
 {
 
-    protected $fillable = ['id', 'title', 'poster_path', 'overview'];
+    /**
+     * fillableカラム
+     */
+    protected $fillable = [
+        'id',
+        'title',
+        'poster_path',
+        'overview'
+    ];
 
+    /**
+     * 追加カラム：映画画像フルURL
+     */
     protected $appends = ['poster_full_path'];
 
     /**

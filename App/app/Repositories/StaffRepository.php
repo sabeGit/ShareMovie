@@ -6,29 +6,21 @@ class StaffRepository implements StaffRepositoryInterface {
 
     protected $staff;
 
-    public function __construct(Staff $staff) {
+    public function __construct(Staff $staff)
+    {
         $this->staff = $staff;
-    }
-
-    /**
-     * idからstaffを取得
-     *
-     * @var $staff_id
-     * @return Illuminate\Database\Eloquent\Model
-     */
-    public function getById($staff_id) {
-        return $this->staff->find($staff_id);
     }
 
     /**
      * staffを作成
      *
-     * @var $obj ['casts'=>[staffInfo], 'crews'=>[staffInfo]]
-     * @return Illuminate\Database\Eloquent\Model
+     * @param object $staff
+     * @return Staff
      */
-    public function create($obj) {
+    public function create($staff)
+    {
         $creditArray = array();
-        foreach($obj as $job => $staffInfos) {
+        foreach($staff as $job => $staffInfos) {
             $targetStaffArray = array();
             foreach($staffInfos as $staffInfo) {
                 $targetStaff = Staff::updateOrCreate(
@@ -39,6 +31,7 @@ class StaffRepository implements StaffRepositoryInterface {
                 $creditArray[$job] = $targetStaffArray;
             }
         }
+
         return $creditArray;
     }
 }
