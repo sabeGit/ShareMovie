@@ -57822,9 +57822,15 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // if (store.state.auth.isLoggedIn) {
-            //     await store.dispatch('auth/currentUser');
-            // }
+            if (!_store__WEBPACK_IMPORTED_MODULE_4__["default"].state.auth.isLoggedIn) {
+              _context.next = 3;
+              break;
+            }
+
+            _context.next = 3;
+            return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/currentUser');
+
+          case 3:
             new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
               el: '#app',
               router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -57835,7 +57841,7 @@ function () {
               template: '<App />'
             });
 
-          case 1:
+          case 4:
           case "end":
             return _context.stop();
         }
