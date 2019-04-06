@@ -59670,36 +59670,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var state = {
+  // ユーザー
   user: null,
+  // ログインユーザー
   loginUser: null,
+  // APIコール結果
   apiStatus: null,
-  loginErrorMessages: null,
+  // ログイン状況
   isLoggedIn: !!localStorage.getItem('token'),
-  isRegistered: 0,
-  //0:結果待ち, 1:登録成功, 2:登録失敗
-  beforeAuthPagePath: ''
+  // ユーザー登録状況  0:結果待ち, 1:登録成功, 2:登録失敗
+  isRegistered: 0
 };
 var getters = {
+  // ユーザー取得
   user: function user(state) {
     return state.user;
   },
+  // ログイン状況取得
   check: function check(state) {
     return !!state.loginUser;
   },
-  username: function username(state) {
-    return state.loginUser ? state.loginUser.name : '';
-  },
+  // ログインユーザー取得
   loginUser: function loginUser(state) {
     return state.loginUser;
   },
+  // ログインユーザーネーム取得
+  username: function username(state) {
+    return state.loginUser ? state.loginUser.name : '';
+  },
+  // ユーザー登録状況取得
   isRegistered: function isRegistered(state) {
     return state.isRegistered;
   },
+  // APIコール結果取得
   apiStatus: function apiStatus(state) {
     return state.apiStatus;
-  },
-  beforeAuthPagePath: function beforeAuthPagePath(state) {
-    return state.beforeAuthPagePath;
   }
 };
 var mutations = {
@@ -59711,15 +59716,6 @@ var mutations = {
   },
   setApiStatus: function setApiStatus(state, status) {
     state.apiStatus = status;
-  },
-  setLoginErrorMessages: function setLoginErrorMessages(state, messages) {
-    state.loginErrorMessages = messages;
-  },
-  setRegisterErrorMessages: function setRegisterErrorMessages(state, messages) {
-    state.setRegisterErrorMessages = messages;
-  },
-  setBeforeAuthPagePath: function setBeforeAuthPagePath(state, path) {
-    state.beforeAuthPagePath = path;
   },
   loginUser: function loginUser(state) {
     state.isLoggedIn = true;
@@ -59742,7 +59738,9 @@ var actions = {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // ユーザー登録API
+
               _context.next = 3;
               return axios.post('/api/register', data);
 
@@ -59754,20 +59752,16 @@ var actions = {
                 break;
               }
 
-              context.commit('setApiStatus', true); // context.dispatch('currentUser');
-
+              context.commit('setApiStatus', true);
               return _context.abrupt("return", false);
 
             case 7:
-              context.commit('setApiStatus', false);
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
 
             case 9:
             case "end":
@@ -59793,8 +59787,11 @@ var actions = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              context.commit('setApiStatus', null);
-              context.commit('registered', 0);
+              // 初期設定
+              context.commit('setApiStatus', null); // ユーザー登録状況  0:結果待ち
+
+              context.commit('registered', 0); // ユーザー本登録API @param:メールアドレストークン
+
               _context2.next = 4;
               return axios.get('/api/register/verify', {
                 params: {
@@ -59805,24 +59802,42 @@ var actions = {
             case 4:
               response = _context2.sent;
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"] && response.data.result === 'success') {
-                localStorage.setItem('token', response.data.access_token);
-                context.commit('loginUser');
-                context.commit('registered', 1);
-                context.commit('setApiStatus', true);
-                context.dispatch('currentUser');
-              } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"] && response.data.result === 'error') {
-                context.commit('setApiStatus', false);
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"] && response.data.result === 'success')) {
+                _context2.next = 14;
+                break;
+              }
+
+              // ユーザー登録状況  1:登録成功
+              context.commit('registered', 1); // アクセストークンをブラウザのローカルストレージに格納
+
+              localStorage.setItem('token', response.data.access_token); // ログイン成功
+
+              context.commit('loginUser');
+              context.commit('setApiStatus', true); // ログインユーザーチェック
+
+              _context2.next = 12;
+              return context.dispatch('currentUser');
+
+            case 12:
+              _context2.next = 15;
+              break;
+
+            case 14:
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"] && response.data.result === 'error') {
+                // ユーザー登録状況  2:登録失敗
                 context.commit('registered', 2);
+                context.commit('setApiStatus', false);
               } else {
+                // ステータスコードをerrorストアに格納
                 context.commit('error/setCode', response.status, {
                   root: true
                 });
               }
 
+            case 15:
               return _context2.abrupt("return", false);
 
-            case 7:
+            case 16:
             case "end":
               return _context2.stop();
           }
@@ -59846,30 +59861,39 @@ var actions = {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // ログインAPI
+
               _context3.next = 3;
               return axios.post('/api/login', data);
 
             case 3:
               response = _context3.sent;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context3.next = 12;
+                _context3.next = 11;
                 break;
               }
 
-              localStorage.setItem('token', response.data.access_token);
+              // アクセストークンをブラウザのローカルストレージに格納
+              localStorage.setItem('token', response.data.access_token); // ログイン成功
+
               context.commit('loginUser');
-              context.commit('setApiStatus', true);
-              _context3.next = 11;
+              context.commit('setApiStatus', true); // ログインユーザーチェック
+
+              _context3.next = 10;
               return context.dispatch('currentUser');
 
-            case 11:
+            case 10:
               return _context3.abrupt("return", false);
 
-            case 12:
-              context.commit('setApiStatus', false);
+            case 11:
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
+
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
 
             case 13:
             case "end":
@@ -59895,7 +59919,9 @@ var actions = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // ログアウトAPI
+
               _context4.next = 3;
               return axios.post('/api/logout');
 
@@ -59907,14 +59933,18 @@ var actions = {
                 break;
               }
 
-              localStorage.removeItem('token');
+              // ローカルストレージのアクセストークンを削除
+              localStorage.removeItem('token'); // ログアウト成功
+
               context.commit('logoutUser');
               context.commit('setApiStatus', true);
               context.commit('setLoginUser', null);
               return _context4.abrupt("return", false);
 
             case 10:
-              context.commit('setApiStatus', false);
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
+
               context.commit('error/setCode', response.status, {
                 root: true
               });
@@ -59943,31 +59973,35 @@ var actions = {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // ログインユーザー取得
+
               _context5.next = 3;
               return axios.get('/api/me');
 
             case 3:
               response = _context5.sent;
               loginUser = response.data || null;
-              console.log(response);
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                _context5.next = 10;
+                _context5.next = 9;
                 break;
               }
 
+              // ログインユーザー取得成功
               context.commit('setApiStatus', true);
               context.commit('setLoginUser', loginUser);
               return _context5.abrupt("return", false);
 
-            case 10:
-              context.commit('setApiStatus', false);
+            case 9:
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
+
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 12:
+            case 11:
             case "end":
               return _context5.stop();
           }
@@ -59991,7 +60025,9 @@ var actions = {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // 確認メール再送API  @param:メールアドレス
+
               _context6.next = 3;
               return axios.get('/api/register/verify/resend', {
                 params: {
@@ -60007,19 +60043,17 @@ var actions = {
                 break;
               }
 
+              // APIコール成功
               context.commit('setApiStatus', true);
               return _context6.abrupt("return", false);
 
             case 7:
-              context.commit('setApiStatus', false);
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
 
             case 9:
             case "end":
@@ -60045,7 +60079,9 @@ var actions = {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // パスワードリセットメール送信API  @param:メールアドレス
+
               _context7.next = 3;
               return axios.get('/api/password', {
                 params: {
@@ -60061,19 +60097,17 @@ var actions = {
                 break;
               }
 
+              // APIコール成功
               context.commit('setApiStatus', true);
               return _context7.abrupt("return", false);
 
             case 7:
-              context.commit('setApiStatus', false);
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
 
             case 9:
             case "end":
@@ -60100,7 +60134,9 @@ var actions = {
           switch (_context8.prev = _context8.next) {
             case 0:
               data = _ref.data, token = _ref.token;
-              context.commit('setApiStatus', null);
+              // 初期設定
+              context.commit('setApiStatus', null); // パスワードリセットAPI
+
               _context8.next = 4;
               return axios.post('/api/password/reset', {
                 token: token,
@@ -60116,19 +60152,17 @@ var actions = {
                 break;
               }
 
+              // APIコール成功
               context.commit('setApiStatus', true);
               return _context8.abrupt("return", false);
 
             case 8:
-              context.commit('setApiStatus', false);
+              // APIコール失敗
+              context.commit('setApiStatus', false); // ステータスコードをerrorストアに格納
 
-              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                context.commit('setLoginErrorMessages', response.data.errors);
-              } else {
-                context.commit('error/setCode', response.status, {
-                  root: true
-                });
-              }
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
 
             case 10:
             case "end":
